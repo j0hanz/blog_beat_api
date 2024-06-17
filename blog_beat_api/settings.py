@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'profiles',
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
