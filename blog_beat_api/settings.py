@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_countries',
     'profiles',
+    'posts',
 ]
 
 SITE_ID = 1
