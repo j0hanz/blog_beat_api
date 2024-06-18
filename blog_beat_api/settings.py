@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django_countries',
     'profiles',
     'posts',
+    'comments',
 ]
 
 SITE_ID = 1
