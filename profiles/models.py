@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 
@@ -11,7 +10,7 @@ class Profile(models.Model):
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/', default='../default_nobody_x67hac'
+        upload_to='images/', default='../default_nobody_x67hac', blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,9 +22,22 @@ class Profile(models.Model):
         return f"{self.owner.username}'s profile"
 
 
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(owner=instance)
+class SocialMediaLink(models.Model):
+    SOCIAL_MEDIA_CHOICES = [
+        ('facebook', 'Facebook'),
+        ('instagram', 'Instagram'),
+        ('youtube', 'YouTube'),
+        ('website', 'Website'),
+    ]
 
+    profile = models.ForeignKey(
+        Profile, related_name='social_media_links', on_delete=models.CASCADE
+    )
+    platform = models.CharField(max_length=50, choices=SOCIAL_MEDIA_CHOICES)
+    url = models.URLField(max_length=200)
 
-post_save.connect(create_profile, sender=User)
+    class Meta:
+        unique_together = ('profile', 'platform')
+
+    def __str__(self):
+        return f"{self.profile.owner.username} - {self.platform}"
