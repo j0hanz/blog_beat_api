@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from .models import Profile, SocialMediaLink
 from .serializers import ProfileSerializer
+from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
 class ProfileList(generics.ListCreateAPIView):
@@ -43,6 +44,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_object(self):
         try:
@@ -52,7 +54,9 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         profile = serializer.save(owner=self.request.user)
-        social_media_links_data = self.request.data.get('social_media_links')
+        social_media_links_data = self.request.data.get(
+            'social_media_links', []
+        )
         if social_media_links_data:
             SocialMediaLink.objects.filter(profile=profile).delete()
             for link_data in social_media_links_data:
