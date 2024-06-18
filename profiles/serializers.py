@@ -24,7 +24,7 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
     posts_count = serializers.ReadOnlyField()
     followers_count = serializers.ReadOnlyField()
     following_count = serializers.ReadOnlyField()
-    social_media_links = SocialMediaLinkSerializer(many=True)
+    social_media_links = SocialMediaLinkSerializer(many=True, required=False)
 
     def get_is_owner(self, obj):
         request = self.context['request']
@@ -60,14 +60,14 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        social_media_links_data = validated_data.pop('social_media_links')
+        social_media_links_data = validated_data.pop('social_media_links', [])
         profile = Profile.objects.create(**validated_data)
         for link_data in social_media_links_data:
             SocialMediaLink.objects.create(profile=profile, **link_data)
         return profile
 
     def update(self, instance, validated_data):
-        social_media_links_data = validated_data.pop('social_media_links')
+        social_media_links_data = validated_data.pop('social_media_links', [])
         instance.first_name = validated_data.get(
             'first_name', instance.first_name
         )
