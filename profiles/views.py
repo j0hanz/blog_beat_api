@@ -2,7 +2,7 @@ from django.db.models import Count
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
-from .models import Profile
+from .models import Profile, SocialMediaLink
 from .serializers import ProfileSerializer
 
 
@@ -29,7 +29,11 @@ class ProfileList(generics.ListCreateAPIView):
     ]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        profile = serializer.save(owner=self.request.user)
+        social_media_links_data = self.request.data.get('social_media_links')
+        if social_media_links_data:
+            for link_data in social_media_links_data:
+                SocialMediaLink.objects.create(profile=profile, **link_data)
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -45,3 +49,11 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
             return super().get_object()
         except Profile.DoesNotExist:
             raise Http404
+
+    def perform_update(self, serializer):
+        profile = serializer.save(owner=self.request.user)
+        social_media_links_data = self.request.data.get('social_media_links')
+        if social_media_links_data:
+            SocialMediaLink.objects.filter(profile=profile).delete()
+            for link_data in social_media_links_data:
+                SocialMediaLink.objects.create(profile=profile, **link_data)
