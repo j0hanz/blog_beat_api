@@ -9,7 +9,7 @@ from .serializers import ProfileSerializer
 class ProfileList(generics.ListCreateAPIView):
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
-        followers_count=Count('owner__followed', distinct=True),
+        followers_count=Count('owner__followers', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
@@ -25,7 +25,7 @@ class ProfileList(generics.ListCreateAPIView):
         'followers_count',
         'following_count',
         'owner__following__created_at',
-        'owner__followed__created_at',
+        'owner__followers__created_at',
     ]
 
     def perform_create(self, serializer):
@@ -35,7 +35,7 @@ class ProfileList(generics.ListCreateAPIView):
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
-        followers_count=Count('owner__followed', distinct=True),
+        followers_count=Count('owner__followers', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
