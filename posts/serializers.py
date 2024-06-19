@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post
+from posts.models import Post, Bookmark
 from likes.models import Like
 
 
@@ -11,6 +11,8 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+    bookmark_id = serializers.SerializerMethodField()
+    bookmarks_count = serializers.ReadOnlyField()
 
     def validate_image(self, value):
         if value.size > 2 * 1024 * 1024:
@@ -30,6 +32,13 @@ class PostSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             like = Like.objects.filter(owner=user, post=obj).first()
             return like.id if like else None
+        return None
+
+    def get_bookmark_id(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            bookmark = Bookmark.objects.filter(owner=user, post=obj).first()
+            return bookmark.id if bookmark else None
         return None
 
     def get_is_owner(self, obj):
@@ -54,4 +63,14 @@ class PostSerializer(serializers.ModelSerializer):
             'like_id',
             'likes_count',
             'comments_count',
+            'bookmark_id',
+            'bookmarks_count',
         ]
+
+
+class BookmarkSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = Bookmark
+        fields = ['id', 'owner', 'post', 'created_at']
