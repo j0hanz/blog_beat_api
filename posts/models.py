@@ -37,3 +37,19 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.id} {self.title}'
+
+
+class Bookmark(models.Model):
+    owner = models.ForeignKey(
+        User, related_name='bookmarks', on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        Post, related_name='bookmarks', on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('owner', 'post')
+
+    def __str__(self):
+        return f'{self.owner.username} bookmarked {self.post.title}'
