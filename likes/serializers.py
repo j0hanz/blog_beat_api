@@ -4,6 +4,11 @@ from likes.models import Like
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Like model.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:

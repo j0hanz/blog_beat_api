@@ -4,6 +4,11 @@ from posts.models import Post
 
 
 class Like(models.Model):
+    """
+    Like model class,
+    Credit: Code Institute django rest walkthrough project
+    """
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(
         Post, related_name='likes', on_delete=models.CASCADE

@@ -4,6 +4,11 @@ from .models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Comment model.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
@@ -37,4 +42,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentDetailSerializer(CommentSerializer):
+    """
+    Serializer for detailed view of the Comment model.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     post = serializers.ReadOnlyField(source='post.id')

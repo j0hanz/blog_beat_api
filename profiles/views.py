@@ -8,6 +8,10 @@ from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
 class ProfileList(generics.ListCreateAPIView):
+    """
+    View for listing and creating profiles.
+    """
+
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
         followers_count=Count('owner__followers', distinct=True),
@@ -29,6 +33,10 @@ class ProfileList(generics.ListCreateAPIView):
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    View for retrieving, updating, and deleting profiles.
+    """
+
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
         followers_count=Count('owner__followers', distinct=True),
@@ -38,6 +46,9 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
 
     def get_object(self):
+        """
+        Retrieve the profile object, raising 404 if not found.
+        """
         try:
             return super().get_object()
         except Profile.DoesNotExist:

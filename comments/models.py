@@ -4,6 +4,11 @@ from posts.models import Post
 
 
 class Comment(models.Model):
+    """
+    Represents a comment made by a user on a specific post.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField()

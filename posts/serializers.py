@@ -4,6 +4,10 @@ from likes.models import Like
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Post model.
+    """
+
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
@@ -15,6 +19,9 @@ class PostSerializer(serializers.ModelSerializer):
     bookmarks_count = serializers.ReadOnlyField()
 
     def validate_image(self, value):
+        """
+        Validate the image field to ensure it meets size and dimension constraints.
+        """
         if value.size > 2 * 1024 * 1024:
             raise serializers.ValidationError('Image size larger than 2MB!')
         if value.image.height > 4096:
@@ -69,6 +76,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Bookmark model.
+    """
+
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:

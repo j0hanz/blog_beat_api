@@ -5,6 +5,11 @@ from likes.serializers import LikeSerializer
 
 
 class LikeList(generics.ListCreateAPIView):
+    """
+    View for listing and creating likes.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = LikeSerializer
     queryset = Like.objects.all()
@@ -14,6 +19,11 @@ class LikeList(generics.ListCreateAPIView):
 
 
 class LikeDetail(generics.RetrieveDestroyAPIView):
+    """
+    View for retrieving and deleting likes.
+    Credit: Code Institute django rest walkthrough project
+    """
+
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = LikeSerializer
     queryset = Like.objects.all()

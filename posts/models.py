@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 
 
 class Post(models.Model):
+    """
+    Represents a user's post with an image, content, and optional image filter.
+    """
+
     image_filter_choices = [
         ('_1977', '1977'),
         ('brannan', 'Brannan'),
@@ -33,6 +37,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """
+        Meta class for Post model.
+        """
+
         ordering = ['-created_at']
 
     def __str__(self):
@@ -40,6 +48,10 @@ class Post(models.Model):
 
 
 class Bookmark(models.Model):
+    """
+    Represents a bookmark created by a user for a specific post.
+    """
+
     owner = models.ForeignKey(
         User, related_name='bookmarks', on_delete=models.CASCADE
     )
@@ -49,6 +61,10 @@ class Bookmark(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """
+        Meta class for Bookmark model.
+        """
+
         unique_together = ('owner', 'post')
 
     def __str__(self):

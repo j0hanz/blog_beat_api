@@ -8,6 +8,10 @@ from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
 class PostList(generics.ListCreateAPIView):
+    """
+    View for listing and creating posts.
+    """
+
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comment', distinct=True),
@@ -40,6 +44,10 @@ class PostList(generics.ListCreateAPIView):
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    View for retrieving, updating, and deleting posts.
+    """
+
     serializer_class = PostSerializer
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Post.objects.annotate(
@@ -49,6 +57,9 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     ).order_by('-created_at')
 
     def get_object(self):
+        """
+        Retrieve the post object, raising 404 if not found.
+        """
         try:
             post = super().get_object()
             self.check_object_permissions(self.request, post)
@@ -58,10 +69,17 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BookmarkList(generics.ListCreateAPIView):
+    """
+    View for listing and creating bookmarks.
+    """
+
     serializer_class = BookmarkSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """
+        Return bookmarks for the request user.
+        """
         return Bookmark.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
@@ -69,6 +87,10 @@ class BookmarkList(generics.ListCreateAPIView):
 
 
 class BookmarkDetail(generics.RetrieveDestroyAPIView):
+    """
+    View for retrieving and deleting bookmarks.
+    """
+
     serializer_class = BookmarkSerializer
     permission_classes = [IsOwnerOrReadOnly]
 
