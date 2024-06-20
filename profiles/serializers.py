@@ -5,11 +5,18 @@ from followers.models import Follower
 
 
 class SocialMediaLinkSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the SocialMediaLink model.
+    """
+
     class Meta:
         model = SocialMediaLink
         fields = ['platform', 'url']
 
     def validate_url(self, value):
+        """
+        Validate the URL field to ensure it starts with http:// or https://.
+        """
         if not value.startswith(('http://', 'https://')):
             raise serializers.ValidationError(
                 "URL must start with http:// or https://"
@@ -18,6 +25,10 @@ class SocialMediaLinkSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
+    """
+    Serializer for the Profile model.
+    """
+
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     following_id = serializers.SerializerMethodField()
@@ -27,10 +38,16 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
     social_media_links = SocialMediaLinkSerializer(many=True, required=False)
 
     def get_is_owner(self, obj):
+        """
+        Check if the request user is the owner of the profile.
+        """
         request = self.context['request']
         return request.user == obj.owner
 
     def get_following_id(self, obj):
+        """
+        Get the ID of the following relationship if it exists.
+        """
         user = self.context['request'].user
         if user.is_authenticated:
             following = Follower.objects.filter(
