@@ -1,9 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from django.db.models.signals import post_save
 
 
 class Profile(models.Model):
+    """
+    Represents a user's profile with personal information and an image.
+    """
+
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
@@ -16,6 +21,10 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """
+        Meta class for Profile model.
+        """
+
         ordering = ['-created_at']
 
     def __str__(self):
@@ -23,13 +32,16 @@ class Profile(models.Model):
 
 
 class SocialMediaLink(models.Model):
+    """
+    Represents a social media link associated with a user's profile.
+    """
+
     SOCIAL_MEDIA_CHOICES = [
         ('facebook', 'Facebook'),
         ('instagram', 'Instagram'),
         ('youtube', 'YouTube'),
         ('website', 'Website'),
     ]
-
     profile = models.ForeignKey(
         Profile, related_name='social_media_links', on_delete=models.CASCADE
     )
@@ -37,7 +49,22 @@ class SocialMediaLink(models.Model):
     url = models.URLField(max_length=200)
 
     class Meta:
+        """
+        Meta class for SocialMediaLink model.
+        """
+
         unique_together = ('profile', 'platform')
 
     def __str__(self):
         return f"{self.profile.owner.username} - {self.platform}"
+
+
+def create_profile(sender, instance, created, **kwargs):
+    """
+    Function to create a profile once a user is created.
+    """
+    if created:
+        Profile.objects.create(owner=instance)
+
+
+post_save.connect(create_profile, sender=User)
