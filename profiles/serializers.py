@@ -58,27 +58,3 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
             'following_count',
             'social_media_links',
         ]
-
-    def create(self, validated_data):
-        social_media_links_data = validated_data.pop('social_media_links', [])
-        profile = Profile.objects.create(**validated_data)
-        for link_data in social_media_links_data:
-            SocialMediaLink.objects.create(profile=profile, **link_data)
-        return profile
-
-    def update(self, instance, validated_data):
-        social_media_links_data = validated_data.pop('social_media_links', [])
-        instance.first_name = validated_data.get(
-            'first_name', instance.first_name
-        )
-        instance.last_name = validated_data.get(
-            'last_name', instance.last_name
-        )
-        instance.country = validated_data.get('country', instance.country)
-        instance.bio = validated_data.get('bio', instance.bio)
-        instance.image = validated_data.get('image', instance.image)
-        instance.save()
-        instance.social_media_links.all().delete()
-        for link_data in social_media_links_data:
-            SocialMediaLink.objects.create(profile=instance, **link_data)
-        return instance
