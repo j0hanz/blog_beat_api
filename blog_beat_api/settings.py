@@ -63,8 +63,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
+    os.environ.get('ALLOWED_HOST'),
     'blog-beat-api-bab609deb9ee.herokuapp.com',
     'localhost',
+    '127.0.0.1',
 ]
 
 # Application definition
