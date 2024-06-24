@@ -35,6 +35,9 @@ class Post(models.Model):
         max_length=32, choices=IMAGE_FILTER_CHOICES, default='normal'
     )
     location = models.CharField(max_length=150, blank=True)
+    favourites = models.ManyToManyField(
+        User, related_name='favourite_posts', blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -43,23 +46,3 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.id} {self.title}'
-
-
-class Bookmark(models.Model):
-    """
-    Represents a bookmark created by a user for a specific post.
-    """
-
-    owner = models.ForeignKey(
-        User, related_name='bookmarks', null=True, on_delete=models.SET_NULL
-    )
-    post = models.ForeignKey(
-        Post, related_name='bookmarks', on_delete=models.CASCADE
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('owner', 'post')
-
-    def __str__(self):
-        return f'{self.owner.username if self.owner else "No owner"} bookmarked {self.post.title}'
