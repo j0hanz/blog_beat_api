@@ -1,7 +1,7 @@
-## Database Schema Documentation
+## Database
 
 ### Overview
-This document describes the schema of our database, detailing the tables and their relationships. The database consists of users, profiles, posts, comments, likes, bookmarks, followers, and social media links.
+This document describes the schema for Blog beat:s database, detailing the tables and their relationships. The database consists of users, profiles, posts, comments, likes, bookmarks, followers, and social media links.
 
 ![Blog Beat API](https://github.com/j0hanz/blog_beat_api/assets/159924955/e5253030-410e-4905-accb-6587aecee6d2)
 
@@ -17,7 +17,7 @@ Stores user account information.
 Tracks user follow relationships.
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.username`
-- **followed**: Foreign Key referencing `User.password`
+- **followed**: Foreign Key referencing `User.id`
 - **created_at**: DateTimeField
 
 #### SocialMediaLink
