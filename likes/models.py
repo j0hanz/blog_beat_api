@@ -9,7 +9,9 @@ class Like(models.Model):
     Credit: Code Institute django rest walkthrough project
     """
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='likes'
+    )
     post = models.ForeignKey(
         Post, related_name='likes', on_delete=models.CASCADE
     )
