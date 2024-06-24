@@ -1,9 +1,9 @@
 from django.db.models import Count
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, status
 from django_filters.rest_framework import DjangoFilterBackend
-from django.http import Http404
-from .models import Post, Bookmark
-from .serializers import PostSerializer, BookmarkSerializer
+from rest_framework.response import Response
+from .models import Post
+from .serializers import PostSerializer
 from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
@@ -12,32 +12,20 @@ class PostList(generics.ListCreateAPIView):
     View for listing and creating posts.
     """
 
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
-        bookmarks_count=Count('bookmarks', distinct=True),
     ).order_by('-created_at')
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
-    filterset_fields = [
-        'likes__owner__profile',
-        'owner__profile',
-    ]
-    search_fields = [
-        'owner__username',
-        'title',
-    ]
-    ordering_fields = [
-        'likes_count',
-        'comments_count',
-        'bookmarks_count',
-        'likes__created_at',
-    ]
-    serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filterset_fields = ['likes__owner__profile', 'owner__profile']
+    search_fields = ['owner__username', 'title']
+    ordering_fields = ['likes_count', 'comments_count', 'likes__created_at']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -53,46 +41,23 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
-        bookmarks_count=Count('bookmarks', distinct=True),
     ).order_by('-created_at')
 
-    def get_object(self):
-        """
-        Retrieve the post object, raising 404 if not found.
-        """
-        try:
-            post = super().get_object()
-            self.check_object_permissions(self.request, post)
-            return post
-        except Post.DoesNotExist:
-            raise Http404
 
-
-class BookmarkList(generics.ListCreateAPIView):
+class AddRemoveFavourite(generics.UpdateAPIView):
     """
-    View for listing and creating bookmarks.
+    View for adding or removing a post from favourites.
     """
 
-    serializer_class = BookmarkSerializer
+    serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        """
-        Return bookmarks for the request user.
-        """
-        return Bookmark.objects.filter(owner=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class BookmarkDetail(generics.RetrieveDestroyAPIView):
-    """
-    View for retrieving and deleting bookmarks.
-    """
-
-    serializer_class = BookmarkSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        return Bookmark.objects.filter(owner=self.request.user)
+    def post(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = request.user
+        if post.favourites.filter(id=user.id).exists():
+            post.favourites.remove(user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            post.favourites.add(user)
+            return Response(status=status.HTTP_201_CREATED)
