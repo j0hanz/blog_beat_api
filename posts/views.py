@@ -44,11 +44,12 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     ).order_by('-created_at')
 
 
-class AddRemoveFavourite(generics.UpdateAPIView):
+class AddRemoveFavourite(generics.GenericAPIView):
     """
     View for adding or removing a post from favourites.
     """
 
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
