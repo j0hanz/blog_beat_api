@@ -9,7 +9,9 @@ class Profile(models.Model):
     Represents a user's profile with personal information and an image.
     """
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(
+        User, null=True, on_delete=models.SET_NULL, related_name='profile'
+    )
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     country = CountryField(blank=True)
@@ -21,19 +23,15 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        """
-        Meta class for Profile model.
-        """
-
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.owner.username}'s profile"
+        return f"{self.owner.username if self.owner else 'No owner'}'s profile"
 
 
 class SocialMediaLink(models.Model):
     """
-    Represents a social media link associated with a user's profile.
+    Represents a social media link associated with a user.
     """
 
     SOCIAL_MEDIA_CHOICES = [
@@ -42,21 +40,20 @@ class SocialMediaLink(models.Model):
         ('youtube', 'YouTube'),
         ('website', 'Website'),
     ]
-    profile = models.ForeignKey(
-        Profile, related_name='social_media_links', on_delete=models.CASCADE
+    owner = models.ForeignKey(
+        User,
+        related_name='social_media_links',
+        null=True,
+        on_delete=models.SET_NULL,
     )
     platform = models.CharField(max_length=50, choices=SOCIAL_MEDIA_CHOICES)
     url = models.URLField(max_length=200)
 
     class Meta:
-        """
-        Meta class for SocialMediaLink model.
-        """
-
-        unique_together = ('profile', 'platform')
+        unique_together = ('owner', 'platform')
 
     def __str__(self):
-        return f"{self.profile.owner.username} - {self.platform}"
+        return f"{self.owner.username if self.owner else 'No owner'} - {self.platform}"
 
 
 def create_profile(sender, instance, created, **kwargs):
