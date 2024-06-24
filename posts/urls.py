@@ -1,11 +1,11 @@
 from django.urls import path
-from posts import views
+from . import views
 
 urlpatterns = [
-    path('posts/', views.PostList.as_view(), name='post-list'),
-    path('posts/<int:pk>/', views.PostDetail.as_view(), name='post-detail'),
+    path('', views.PostList.as_view(), name='post-list'),
+    path('<int:pk>/', views.PostDetail.as_view(), name='post-detail'),
     path(
-        'posts/<int:pk>/favourite/',
+        '<int:pk>/favourite/',
         views.AddRemoveFavourite.as_view(),
         name='post-favourite',
     ),
