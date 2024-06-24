@@ -40,6 +40,13 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_updated_at(self, obj):
         return naturaltime(obj.updated_at)
 
+    def validate_content(self, value):
+        if not value.strip():
+            raise serializers.ValidationError(
+                "Comment content cannot be empty."
+            )
+        return value
+
 
 class CommentDetailSerializer(CommentSerializer):
     """
