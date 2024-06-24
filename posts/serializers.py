@@ -42,6 +42,14 @@ class PostSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title cannot be empty.")
         return value
 
+    def validate_content(self, value):
+        """
+        Validate the content field to ensure it is not empty.
+        """
+        if not value.strip():
+            raise serializers.ValidationError("Post content cannot be empty.")
+        return value
+
     def get_like_id(self, obj):
         user = self.context['request'].user
         if user.is_authenticated:
