@@ -41,10 +41,11 @@ class CommentSerializer(serializers.ModelSerializer):
         return naturaltime(obj.updated_at)
 
     def validate_content(self, value):
+        """
+        Validate the content field to ensure it is not empty.
+        """
         if not value.strip():
-            raise serializers.ValidationError(
-                "Comment content cannot be empty."
-            )
+            raise serializers.ValidationError("Comment cannot be empty.")
         return value
 
 
