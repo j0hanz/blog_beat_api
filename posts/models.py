@@ -7,7 +7,7 @@ class Post(models.Model):
     Represents a user's post with an image, content, and optional image filter.
     """
 
-    image_filter_choices = [
+    IMAGE_FILTER_CHOICES = [
         ('_1977', '1977'),
         ('brannan', 'Brannan'),
         ('earlybird', 'Earlybird'),
@@ -23,24 +23,22 @@ class Post(models.Model):
         ('walden', 'Walden'),
         ('xpro2', 'X-pro II'),
     ]
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name='posts'
+    )
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True)
     image = models.ImageField(
         upload_to='images/', default='../default_nobody_x67hac', blank=True
     )
     image_filter = models.CharField(
-        max_length=32, choices=image_filter_choices, default='normal'
+        max_length=32, choices=IMAGE_FILTER_CHOICES, default='normal'
     )
     location = models.CharField(max_length=150, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        """
-        Meta class for Post model.
-        """
-
         ordering = ['-created_at']
 
     def __str__(self):
@@ -53,7 +51,7 @@ class Bookmark(models.Model):
     """
 
     owner = models.ForeignKey(
-        User, related_name='bookmarks', on_delete=models.CASCADE
+        User, related_name='bookmarks', null=True, on_delete=models.SET_NULL
     )
     post = models.ForeignKey(
         Post, related_name='bookmarks', on_delete=models.CASCADE
@@ -61,11 +59,7 @@ class Bookmark(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        """
-        Meta class for Bookmark model.
-        """
-
         unique_together = ('owner', 'post')
 
     def __str__(self):
-        return f'{self.owner.username} bookmarked {self.post.title}'
+        return f'{self.owner.username if self.owner else "No owner"} bookmarked {self.post.title}'
