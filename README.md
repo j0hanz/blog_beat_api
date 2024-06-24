@@ -1,34 +1,40 @@
-## Database
+## Blog Beat API Database Schema
 
 ### Overview
-This document describes the schema for Blog beat:s database, detailing the tables and their relationships. The database consists of users, profiles, posts, comments, likes, bookmarks, followers, and social media links.
+This document describes the schema for Blog Beat's database, detailing the tables and their relationships. The database consists of users, profiles, posts, comments, likes, bookmarks, followers, and social media links.
 
 ![Blog Beat API](https://github.com/j0hanz/blog_beat_api/assets/159924955/e5253030-410e-4905-accb-6587aecee6d2)
+
+---
 
 ### Tables
 
 #### User
 Stores user account information.
+
 - **id**: BigAuto (Primary Key)
 - **username**: Char
 - **password**: Char
 
 #### Follower
 Tracks user follow relationships.
+
 - **id**: BigAuto (Primary Key)
-- **owner**: Foreign Key referencing `User.username`
+- **owner**: Foreign Key referencing `User.id`
 - **followed**: Foreign Key referencing `User.id`
 - **created_at**: DateTimeField
 
 #### SocialMediaLink
 Stores links to social media profiles.
+
 - **id**: BigAuto (Primary Key)
-- **profile**: Foreign Key referencing `Post`
+- **profile**: Foreign Key referencing `Profile.id`
 - **platform**: CharField
 - **url**: URLField
 
 #### Profile
 Contains detailed user profile information.
+
 - **id**: BigAuto (Primary Key)
 - **owner**: OneToOneField referencing `User.id`
 - **first_name**: CharField
@@ -41,35 +47,39 @@ Contains detailed user profile information.
 
 #### Post
 Holds user-generated content.
+
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
 - **title**: CharField
 - **content**: TextField
 - **image**: ImageField
 - **image_filter**: CharField
-- **position**: CharField
+- **location**: CharField
 - **created_at**: DateTimeField
 - **updated_at**: DateTimeField
 
-####Like
+#### Like
 Records user likes on posts.
+
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post`
+- **post**: Foreign Key referencing `Post.id`
 - **created_at**: DateTimeField
 
 #### Bookmark
 Keeps track of user bookmarks.
+
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post`
+- **post**: Foreign Key referencing `Post.id`
 - **created_at**: DateTimeField
 
 #### Comment
 Stores user comments on posts.
+
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post`
+- **post**: Foreign Key referencing `Post.id`
 - **content**: TextField
 - **created_at**: DateTimeField
 - **updated_at**: DateTimeField
