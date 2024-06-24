@@ -13,7 +13,7 @@ class ProfileList(generics.ListCreateAPIView):
     """
 
     queryset = Profile.objects.annotate(
-        posts_count=Count('owner__post', distinct=True),
+        posts_count=Count('owner__posts', distinct=True),
         followers_count=Count('owner__followers', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
@@ -38,7 +38,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     """
 
     queryset = Profile.objects.annotate(
-        posts_count=Count('owner__post', distinct=True),
+        posts_count=Count('owner__posts', distinct=True),
         followers_count=Count('owner__followers', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
