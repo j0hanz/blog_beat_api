@@ -156,10 +156,12 @@ if 'DEV' in os.environ:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    print('Connected to the development database (SQLite3)')
 else:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
     }
+    print('Connected to the production database')
 
 
 # Password validation
