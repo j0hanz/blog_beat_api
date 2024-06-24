@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post, Bookmark
+from posts.models import Post
 from likes.models import Like
 
 
@@ -15,8 +15,7 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
-    bookmark_id = serializers.SerializerMethodField()
-    bookmarks_count = serializers.ReadOnlyField()
+    is_favourited = serializers.SerializerMethodField()
 
     def validate_image(self, value):
         """
@@ -57,16 +56,15 @@ class PostSerializer(serializers.ModelSerializer):
             return like.id if like else None
         return None
 
-    def get_bookmark_id(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            bookmark = Bookmark.objects.filter(owner=user, post=obj).first()
-            return bookmark.id if bookmark else None
-        return None
-
     def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner
+
+    def get_is_favourited(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.favourites.filter(id=user.id).exists()
+        return False
 
     class Meta:
         model = Post
@@ -86,18 +84,5 @@ class PostSerializer(serializers.ModelSerializer):
             'like_id',
             'likes_count',
             'comments_count',
-            'bookmark_id',
-            'bookmarks_count',
+            'is_favourited',
         ]
-
-
-class BookmarkSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the Bookmark model.
-    """
-
-    owner = serializers.ReadOnlyField(source='owner.username')
-
-    class Meta:
-        model = Bookmark
-        fields = ['id', 'owner', 'post', 'created_at']
