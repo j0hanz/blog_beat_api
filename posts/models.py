@@ -27,7 +27,7 @@ class Post(models.Model):
         User, null=True, on_delete=models.SET_NULL, related_name='posts'
     )
     title = models.CharField(max_length=255)
-    content = models.TextField(blank=True)
+    content = models.TextField(blank=False)
     image = models.ImageField(
         upload_to='images/', default='../default_nobody_x67hac', blank=True
     )
