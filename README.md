@@ -55,21 +55,21 @@ Holds user-generated content.
 Records user likes on posts.
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post.updated_at`
+- **post**: Foreign Key referencing `Post`
 - **created_at**: DateTimeField
 
 #### Bookmark
 Keeps track of user bookmarks.
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post.id`
+- **post**: Foreign Key referencing `Post`
 - **created_at**: DateTimeField
 
 #### Comment
 Stores user comments on posts.
 - **id**: BigAuto (Primary Key)
 - **owner**: Foreign Key referencing `User.id`
-- **post**: Foreign Key referencing `Post.updated_at`
+- **post**: Foreign Key referencing `Post`
 - **content**: TextField
 - **created_at**: DateTimeField
 - **updated_at**: DateTimeField
