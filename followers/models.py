@@ -7,6 +7,7 @@ class Follower(models.Model):
     Represents a user following another user.
     Credit: Code Institute django rest walkthrough project
     """
+
     owner = models.ForeignKey(
         User, related_name='following', on_delete=models.CASCADE
     )
