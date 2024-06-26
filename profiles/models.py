@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
@@ -9,9 +9,7 @@ class Profile(models.Model):
     Represents a user's profile with personal information and an image.
     """
 
-    owner = models.OneToOneField(
-        User, null=True, on_delete=models.SET_NULL, related_name='profile'
-    )
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=True)
     country = CountryField(blank=True)
@@ -26,7 +24,7 @@ class Profile(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.owner.username if self.owner else 'No owner'}'s profile"
+        return f"{self.owner}'s profile"
 
 
 class SocialMediaLink(models.Model):
@@ -40,20 +38,21 @@ class SocialMediaLink(models.Model):
         ('youtube', 'YouTube'),
         ('website', 'Website'),
     ]
-    owner = models.ForeignKey(
-        User,
-        related_name='social_media_links',
-        null=True,
-        on_delete=models.SET_NULL,
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    platform = models.CharField(
+        max_length=50, choices=SOCIAL_MEDIA_CHOICES, blank=True
     )
-    platform = models.CharField(max_length=50, choices=SOCIAL_MEDIA_CHOICES)
-    url = models.URLField(max_length=200)
+    url = models.URLField(max_length=200, blank=True)
 
     class Meta:
-        unique_together = ('owner', 'platform')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['owner', 'platform'], name='unique_owner_platform'
+            )
+        ]
 
     def __str__(self):
-        return f"{self.owner.username if self.owner else 'No owner'} - {self.platform}"
+        return f"{self.owner} {self.platform}"
 
 
 def create_profile(sender, instance, created, **kwargs):
