@@ -17,11 +17,11 @@ class ProfileList(generics.ListAPIView):
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
-    filter_backends = [
-        filters.OrderingFilter,
-        DjangoFilterBackend,
+    filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = [
+        'owner__following__followed__profile',
+        'owner__followed__owner__profile',
     ]
-    filterset_fields = ['owner__following__followed__profile']
     ordering_fields = [
         'posts_count',
         'followers_count',
@@ -36,10 +36,10 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     View for retrieving, updating, and deleting profiles.
     """
 
-    serializer_class = ProfileSerializer
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__posts', distinct=True),
         followers_count=Count('owner__followers', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
+    serializer_class = ProfileSerializer
