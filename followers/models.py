@@ -12,13 +12,13 @@ class Follower(models.Model):
         User, related_name='following', on_delete=models.CASCADE
     )
     followed = models.ForeignKey(
-        User, related_name='followers', on_delete=models.CASCADE
+        User, related_name='followed', on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-created_at']
-        unique_together = ['owner', 'followed']
+        constraints = [models.UniqueConstraint(fields=['owner', 'followed'])]
 
     def __str__(self):
-        return f'{self.owner.username} follows {self.followed.username}'
+        return f'{self.owner} follows {self.followed}'
