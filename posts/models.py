@@ -23,10 +23,9 @@ class Post(models.Model):
         ('walden', 'Walden'),
         ('xpro2', 'X-pro II'),
     ]
-    owner = models.ForeignKey(
-        User, null=True, on_delete=models.SET_NULL, related_name='posts'
-    )
-    title = models.CharField(max_length=255)
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150)
     content = models.TextField(blank=False)
     image = models.ImageField(
         upload_to='images/', default='../default_nobody_x67hac', blank=True
@@ -36,7 +35,7 @@ class Post(models.Model):
     )
     location = models.CharField(max_length=150, blank=True)
     favourites = models.ManyToManyField(
-        User, related_name='favourite_posts', blank=True
+        User, blank=True, related_name='favourite_posts'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
