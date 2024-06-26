@@ -57,10 +57,16 @@ class PostSerializer(serializers.ModelSerializer):
         return None
 
     def get_is_owner(self, obj):
+        """
+        Check if the request user is the owner of the post.
+        """
         request = self.context['request']
         return request.user == obj.owner
 
     def get_is_favourited(self, obj):
+        """
+        Check if the request user has favourited the post.
+        """
         user = self.context['request'].user
         if user.is_authenticated:
             return obj.favourites.filter(id=user.id).exists()
