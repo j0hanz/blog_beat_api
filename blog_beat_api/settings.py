@@ -67,6 +67,7 @@ ALLOWED_HOSTS = [
     'blog-beat-api-bab609deb9ee.herokuapp.com',
     'localhost',
     '127.0.0.1',
+    '8000-j0hanz-blogbeatapi-fzdgq32fg11.ws.codeinstitute-ide.net',
 ]
 
 # Application definition
@@ -113,14 +114,13 @@ MIDDLEWARE = [
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
-    CORS_ALLOWED_ORIGINS = [os.environ.get('CLIENT_ORIGIN')]
-
-if 'CLIENT_ORIGIN_DEV' in os.environ:
-    extracted_url = re.match(
-        r'^.+-', os.environ.get('CLIENT_ORIGIN_DEV', ''), re.IGNORECASE
-    ).group(0)
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV')
+   ]
+else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
-        rf"{extracted_url}(eu|us)\d+\w\.codeinstitute-ide\.net$",
+        r"^https://.*\.codeinstitute-ide\.net$",
     ]
 
 CORS_ALLOW_CREDENTIALS = True
