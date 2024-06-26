@@ -23,7 +23,11 @@ class PostList(generics.ListCreateAPIView):
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
-    filterset_fields = ['likes__owner__profile', 'owner__profile']
+    filterset_fields = [
+        'owner__followed__owner__profile',
+        'likes__owner__profile',
+        'owner__profile',
+    ]
     search_fields = ['owner__username', 'title']
     ordering_fields = ['likes_count', 'comments_count', 'likes__created_at']
 
@@ -44,7 +48,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     ).order_by('-created_at')
 
 
-class AddRemoveFavourite(generics.GenericAPIView):
+class FavouritePost(generics.GenericAPIView):
     """
     View for adding or removing a post from favourites.
     """
@@ -58,7 +62,13 @@ class AddRemoveFavourite(generics.GenericAPIView):
         user = request.user
         if post.favourites.filter(id=user.id).exists():
             post.favourites.remove(user)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                {'status': 'removed from favourites'},
+                status=status.HTTP_204_NO_CONTENT,
+            )
         else:
             post.favourites.add(user)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(
+                {'status': 'added to favourites'},
+                status=status.HTTP_201_CREATED,
+            )
