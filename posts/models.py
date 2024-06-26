@@ -24,7 +24,9 @@ class Post(models.Model):
         ('xpro2', 'X-pro II'),
     ]
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        User, related_name='posts', on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False)
     image = models.ImageField(
