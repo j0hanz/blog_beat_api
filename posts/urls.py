@@ -6,7 +6,7 @@ urlpatterns = [
     path('<int:pk>/', views.PostDetail.as_view(), name='post-detail'),
     path(
         '<int:pk>/favourite/',
-        views.AddRemoveFavourite.as_view(),
+        views.FavouritePost.as_view(),
         name='post-favourite',
     ),
 ]
