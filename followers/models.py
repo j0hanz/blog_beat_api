@@ -18,7 +18,11 @@ class Follower(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-        constraints = [models.UniqueConstraint(fields=['owner', 'followed'])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['owner', 'followed'], name='unique_follow'
+            )
+        ]
 
     def __str__(self):
         return f'{self.owner} follows {self.followed}'
