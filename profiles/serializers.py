@@ -9,10 +9,6 @@ class SocialMediaLinkSerializer(serializers.ModelSerializer):
     Serializer for the SocialMediaLink model.
     """
 
-    class Meta:
-        model = SocialMediaLink
-        fields = ['platform', 'url']
-
     def validate_url(self, value):
         """
         Validate the URL field to ensure it starts with http:// or https://.
@@ -22,6 +18,10 @@ class SocialMediaLinkSerializer(serializers.ModelSerializer):
                 "URL must start with http:// or https://"
             )
         return value
+
+    class Meta:
+        model = SocialMediaLink
+        fields = ['platform', 'url']
 
 
 class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
