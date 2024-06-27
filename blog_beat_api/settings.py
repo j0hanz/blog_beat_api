@@ -145,6 +145,7 @@ TEMPLATES = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.codeinstitute-ide.net',
+    'https://blog-beat-17c62545ca2a.herokuapp.com',
 ]
 WSGI_APPLICATION = 'blog_beat_api.wsgi.application'
 
