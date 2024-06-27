@@ -2,10 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.PostList.as_view(), name='post-list'),
-    path('<int:pk>/', views.PostDetail.as_view(), name='post-detail'),
+    path('posts/', views.PostList.as_view()),
+    path('posts/<int:pk>/', views.PostDetail.as_view()),
     path(
-        '<int:pk>/favourite/',
+        'posts/<int:pk>/favourite/',
         views.FavouritePost.as_view(),
         name='post-favourite',
     ),
