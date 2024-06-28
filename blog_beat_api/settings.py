@@ -64,10 +64,7 @@ DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
-    '.herokuapp.com',
     'localhost',
-    '8000-j0hanz-blogbeatapi-fzdgq32fg11.ws.codeinstitute-ide.net',
-    'blog-beat-17c62545ca2a.herokuapp.com',
 ]
 
 # CORS settings
