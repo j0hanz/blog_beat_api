@@ -35,14 +35,13 @@ REST_FRAMEWORK = {
         )
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
-    'DATETIME_FORMAT': '%d %b %Y',
+    'PAGE_SIZE': 12,
+    'DATETIME_FORMAT': '%a %d-%m-%Y %H:%M',
 }
 if 'DEV' not in os.environ:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
         'rest_framework.renderers.JSONRenderer',
     ]
-
 
 REST_AUTH = {
     'USE_JWT': True,
@@ -52,7 +51,6 @@ REST_AUTH = {
     'JWT_AUTH_SECURE': True,
     'JWT_AUTH_SAMESITE': 'None',
 }
-
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer'
@@ -70,7 +68,7 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
-    ' https://j0hanz-blogbeatweb-xj2tnv38e10.ws.codeinstitute-ide.net',
+    'https://j0hanz-blogbeatweb-xj2tnv38e10.ws.codeinstitute-ide.net',
     'https://j0hanz-blogbeatapi-fzdgq32fg11.ws.codeinstitute-ide.net',
 ]
 
@@ -86,7 +84,6 @@ else:
     ]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -151,6 +148,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.codeinstitute-ide.net',
     'https://blog-beat-17c62545ca2a.herokuapp.com',
 ]
+
 WSGI_APPLICATION = 'blog_beat_api.wsgi.application'
 
 # Database
