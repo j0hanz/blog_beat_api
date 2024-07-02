@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from posts.models import Post
 from likes.models import Like
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -14,8 +15,10 @@ class PostSerializer(serializers.ModelSerializer):
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
-    comments_count = serializers.ReadOnlyField()
+    comments_count = serializers.ReadOnlyField()  # Same as likes_count
     is_favourited = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
+    updated_at = serializers.SerializerMethodField()
 
     def validate_image(self, value):
         """
@@ -71,6 +74,18 @@ class PostSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             return obj.favourites.filter(id=user.id).exists()
         return False
+
+    def get_created_at(self, obj):
+        """
+        Return the time since the post was created in a human-readable format.
+        """
+        return naturaltime(obj.created_at)
+
+    def get_updated_at(self, obj):
+        """
+        Return the time since the post was updated in a human-readable format.
+        """
+        return naturaltime(obj.updated_at)
 
     class Meta:
         model = Post
