@@ -68,9 +68,9 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
-    'https://j0hanz-blogbeatweb-xj2tnv38e10.ws.codeinstitute-ide.net',
-    'https://j0hanz-blogbeatapi-fzdgq32fg11.ws.codeinstitute-ide.net',
+    '.codeinstitute-ide.net',
 ]
+
 
 # CORS settings
 if 'CLIENT_ORIGIN' in os.environ:
@@ -82,6 +82,8 @@ else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
         r"^https://.*\.codeinstitute-ide\.net$",
     ]
+
+CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
@@ -119,12 +121,14 @@ SITE_ID = 1
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'blog_beat_api.urls'
@@ -147,7 +151,7 @@ TEMPLATES = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.codeinstitute-ide.net',
-    'https://blog-beat-17c62545ca2a.herokuapp.com',
+    'https://*.herokuapp.com',
 ]
 
 WSGI_APPLICATION = 'blog_beat_api.wsgi.application'
@@ -198,7 +202,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# WhiteNoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
