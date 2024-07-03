@@ -1,8 +1,8 @@
 from django.db.models import Count
 from rest_framework import generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Profile
-from .serializers import ProfileSerializer
+from .models import Profile, SocialMediaLink
+from .serializers import ProfileSerializer, SocialMediaLinkSerializer
 from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
@@ -46,3 +46,22 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
+
+
+class SocialMediaLinkList(generics.ListCreateAPIView):
+    """
+    View for listing and creating social media links.
+    """
+
+    queryset = SocialMediaLink.objects.all()
+    serializer_class = SocialMediaLinkSerializer
+
+
+class SocialMediaLinkDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    View for retrieving, updating, and deleting social media links.
+    """
+
+    queryset = SocialMediaLink.objects.all()
+    serializer_class = SocialMediaLinkSerializer
+    permission_classes = [IsOwnerOrReadOnly]
