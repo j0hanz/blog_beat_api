@@ -15,7 +15,7 @@ class Profile(models.Model):
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
     image = models.ImageField(
-    upload_to='images/', default='images/nobody.webp', blank=True
+        upload_to='images/', default='images/nobody.webp', blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -38,11 +38,10 @@ class SocialMediaLink(models.Model):
         ('youtube', 'YouTube'),
         ('website', 'Website'),
     ]
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    platform = models.CharField(
-        max_length=50, choices=SOCIAL_MEDIA_CHOICES, blank=True
-    )
-    url = models.URLField(max_length=200, blank=True)
+    platform = models.CharField(max_length=50, choices=SOCIAL_MEDIA_CHOICES)
+    url = models.URLField(max_length=200)
 
     class Meta:
         constraints = [
