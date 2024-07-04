@@ -1,9 +1,9 @@
 from django.db.models import Count
 from rest_framework import generics, permissions, filters, status
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from .models import Post
-from .serializers import PostSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Post, Favorite
+from .serializers import PostSerializer, FavoriteSerializer
 from blog_beat_api.permissions import IsOwnerOrReadOnly
 
 
@@ -48,27 +48,29 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     ).order_by('-created_at')
 
 
-class FavouritePost(generics.GenericAPIView):
+class FavoritePost(generics.GenericAPIView):
     """
-    View for adding or removing a post from favourites.
+    View for adding or removing a post from favorites.
     """
 
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    queryset = Favorite.objects.all()
+    serializer_class = FavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        post = self.get_object()
+        post = Post.objects.get(pk=kwargs['pk'])
         user = request.user
-        if post.favourites.filter(id=user.id).exists():
-            post.favourites.remove(user)
+        favorite, created = Favorite.objects.get_or_create(
+            user=user, post=post
+        )
+        if created:
             return Response(
-                {'status': 'removed from favourites'},
-                status=status.HTTP_204_NO_CONTENT,
+                {'status': 'added to favorites'},
+                status=status.HTTP_201_CREATED,
             )
         else:
-            post.favourites.add(user)
+            favorite.delete()
             return Response(
-                {'status': 'added to favourites'},
-                status=status.HTTP_201_CREATED,
+                {'status': 'removed from favorites'},
+                status=status.HTTP_204_NO_CONTENT,
             )
