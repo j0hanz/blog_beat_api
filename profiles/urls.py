@@ -9,12 +9,12 @@ urlpatterns = [
         name='profile-detail',
     ),
     path(
-        'profiles/social-media-links/',
+        'social-media-links/',
         views.SocialMediaLinkList.as_view(),
         name='social-media-link-list',
     ),
     path(
-        'profiles/social-media-links/<int:pk>/',
+        'social-media-links/<int:pk>/',
         views.SocialMediaLinkDetail.as_view(),
         name='social-media-link-detail',
     ),
