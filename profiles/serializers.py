@@ -9,6 +9,7 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
     Serializer for the Profile model.
     This serializer handles creating and updating of profiles.
     """
+
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     following_id = serializers.SerializerMethodField()
