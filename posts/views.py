@@ -17,6 +17,7 @@ class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
+        favorites_count=Count('favorite', distinct=True),
     ).order_by('-created_at')
     filter_backends = [
         filters.OrderingFilter,
@@ -27,9 +28,15 @@ class PostList(generics.ListCreateAPIView):
         'owner__followed__owner__profile',
         'likes__owner__profile',
         'owner__profile',
+        'favorite__user__profile',
     ]
     search_fields = ['owner__username', 'title']
-    ordering_fields = ['likes_count', 'comments_count', 'likes__created_at']
+    ordering_fields = [
+        'likes_count',
+        'comments_count',
+        'likes__created_at',
+        'favorites_count',
+    ]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -45,6 +52,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
+        favorites_count=Count('favorite', distinct=True),
     ).order_by('-created_at')
 
 
@@ -74,3 +82,18 @@ class FavoritePost(generics.GenericAPIView):
                 {'status': 'removed from favorites'},
                 status=status.HTTP_204_NO_CONTENT,
             )
+
+    def delete(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=kwargs['pk'])
+        user = request.user
+        favorite = Favorite.objects.filter(user=user, post=post).first()
+        if favorite:
+            favorite.delete()
+            return Response(
+                {'status': 'removed from favorites'},
+                status=status.HTTP_204_NO_CONTENT,
+            )
+        return Response(
+            {'status': 'not in favorites'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
