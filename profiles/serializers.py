@@ -1,36 +1,20 @@
 from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
-from .models import Profile, SocialMediaLink
+from .models import Profile
 from followers.models import Follower
-
-
-class SocialMediaLinkSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the SocialMediaLink model.
-    """
-
-    owner = serializers.ReadOnlyField(source='owner.username')
-
-    class Meta:
-        model = SocialMediaLink
-        fields = ['id', 'platform', 'url', 'owner']
 
 
 class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
     """
     Serializer for the Profile model.
-    This serializer handles creating and updating of profiles along with their nested social media links.
+    This serializer handles creating and updating of profiles.
     """
-
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     following_id = serializers.SerializerMethodField()
     posts_count = serializers.ReadOnlyField()
     followers_count = serializers.ReadOnlyField()
     following_count = serializers.ReadOnlyField()
-    social_media_links = SocialMediaLinkSerializer(
-        many=True, read_only=True, source='owner.socialmedialink_set'
-    )
 
     def get_is_owner(self, obj):
         request = self.context['request']
@@ -62,5 +46,4 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
             'posts_count',
             'followers_count',
             'following_count',
-            'social_media_links',
         ]
