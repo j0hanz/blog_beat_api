@@ -17,7 +17,6 @@ class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
-        favorites_count=Count('favorite', distinct=True),
     ).order_by('-created_at')
     filter_backends = [
         filters.OrderingFilter,
@@ -34,8 +33,15 @@ class PostList(generics.ListCreateAPIView):
         'likes_count',
         'comments_count',
         'likes__created_at',
-        'favorites_count',
+        'favorites__created_at',
     ]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if 'favorites' in self.request.query_params and user.is_authenticated:
+            queryset = queryset.filter(favorite__owner=user)
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
