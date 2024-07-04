@@ -85,11 +85,11 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_is_favourited(self, obj):
         """
-        Check if the request user has favorited the post.
+        Check if the request user has favourited the post.
         """
         user = self.context['request'].user
         if user.is_authenticated:
-            return Favorite.objects.filter(user=user, post=obj).exists()
+            return Favorite.objects.filter(owner=user, post=obj).exists()
         return False
 
     def get_created_at(self, obj):
@@ -133,4 +133,4 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
-        fields = ['id', 'user', 'post', 'created_at']
+        fields = ['id', 'owner', 'post', 'created_at']
