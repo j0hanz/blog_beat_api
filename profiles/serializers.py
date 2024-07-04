@@ -46,22 +46,15 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
     posts_count = serializers.ReadOnlyField()
     followers_count = serializers.ReadOnlyField()
     following_count = serializers.ReadOnlyField()
-    social_media_link_count = serializers.ReadOnlyField()
     social_media_links = SocialMediaLinkSerializer(
         many=True, read_only=True, source='owner.socialmedialink_set'
     )
 
     def get_is_owner(self, obj):
-        """
-        Check if the request user is the owner of the profile.
-        """
         request = self.context['request']
         return request.user == obj.owner
 
     def get_following_id(self, obj):
-        """
-        Get the ID of the following relationship if it exists.
-        """
         user = self.context['request'].user
         if user.is_authenticated:
             following = Follower.objects.filter(
@@ -87,6 +80,5 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
             'posts_count',
             'followers_count',
             'following_count',
-            'social_media_link_count',
             'social_media_links',
         ]
