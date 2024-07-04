@@ -67,9 +67,9 @@ class FavoritePost(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
-        user = request.user
+        owner = request.user
         favorite, created = Favorite.objects.get_or_create(
-            user=user, post=post
+            owner=owner, post=post
         )
         if created:
             return Response(
@@ -85,8 +85,8 @@ class FavoritePost(generics.GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
-        user = request.user
-        favorite = Favorite.objects.filter(user=user, post=post).first()
+        owner = request.user
+        favorite = Favorite.objects.filter(owner=owner, post=post).first()
         if favorite:
             favorite.delete()
             return Response(
