@@ -27,7 +27,6 @@ class PostList(generics.ListCreateAPIView):
     filterset_fields = [
         'owner__followed__owner__profile',
         'likes__owner__profile',
-        'favorites__owner__profile',
         'owner__profile',
     ]
     search_fields = ['owner__username', 'title']
@@ -67,9 +66,9 @@ class FavoritePost(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
-        user = request.user
+        owner = request.user
         favorite, created = Favorite.objects.get_or_create(
-            owner=user, post=post
+            owner=owner, post=post
         )
         if created:
             return Response(
@@ -85,8 +84,8 @@ class FavoritePost(generics.GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
-        user = request.user
-        favorite = Favorite.objects.filter(owner=user, post=post).first()
+        owner = request.user
+        favorite = Favorite.objects.filter(owner=owner, post=post).first()
         if favorite:
             favorite.delete()
             return Response(
