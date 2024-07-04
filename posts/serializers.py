@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post
+from posts.models import Post, Favorite
 from likes.models import Like
 import datetime
 
@@ -89,7 +89,7 @@ class PostSerializer(serializers.ModelSerializer):
         """
         user = self.context['request'].user
         if user.is_authenticated:
-            return obj.favourites.filter(id=user.id).exists()
+            return Favorite.objects.filter(user=user, post=obj).exists()
         return False
 
     def get_created_at(self, obj):
@@ -124,3 +124,13 @@ class PostSerializer(serializers.ModelSerializer):
             'comments_count',
             'is_favourited',
         ]
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Favorite model.
+    """
+
+    class Meta:
+        model = Favorite
+        fields = ['id', 'user', 'post', 'created_at']
