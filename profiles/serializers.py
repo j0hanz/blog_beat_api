@@ -7,31 +7,13 @@ from followers.models import Follower
 class SocialMediaLinkSerializer(serializers.ModelSerializer):
     """
     Serializer for the SocialMediaLink model.
-    This serializer validates URLs to ensure they start with "http://" or "https://".
     """
 
-    def validate_url(self, value):
-        """
-        Validate the URL field to ensure it starts with http:// or https://.
-        """
-        if not value.startswith(('http://', 'https://')):
-            raise serializers.ValidationError(
-                "URL must start with http:// or https://"
-            )
-        return value
-
-    def create(self, validated_data):
-        """
-        Override the create method to set the owner to the current authenticated user.
-        """
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            validated_data['owner'] = request.user
-        return super().create(validated_data)
+    owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = SocialMediaLink
-        fields = ['id', 'platform', 'url']
+        fields = ['id', 'platform', 'url', 'owner']
 
 
 class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
