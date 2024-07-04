@@ -49,6 +49,7 @@ class SocialMediaLink(models.Model):
                 fields=['owner', 'platform'], name='unique_owner_platform'
             )
         ]
+        ordering = ['platform']
 
     def __str__(self):
         return f"{self.owner} {self.platform}"
