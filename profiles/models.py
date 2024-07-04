@@ -4,33 +4,6 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 
-class SocialMediaLink(models.Model):
-    """
-    Represents a social media link associated with a user.
-    """
-
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    SOCIAL_MEDIA_CHOICES = [
-        ('facebook', 'Facebook'),
-        ('instagram', 'Instagram'),
-        ('youtube', 'YouTube'),
-        ('website', 'Website'),
-    ]
-    platform = models.CharField(max_length=50, choices=SOCIAL_MEDIA_CHOICES)
-    url = models.URLField(max_length=200)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=['owner', 'platform'], name='unique_owner_platform'
-            )
-        ]
-        ordering = ['platform']
-
-    def __str__(self):
-        return f"{self.platform} {self.url}"
-
-
 class Profile(models.Model):
     """
     Represents a user's profile with personal information and an image.
