@@ -85,7 +85,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_is_favourited(self, obj):
         """
-        Check if the request user has favourited the post.
+        Check if the request user has favorited the post.
         """
         user = self.context['request'].user
         if user.is_authenticated:
