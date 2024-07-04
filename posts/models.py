@@ -49,17 +49,13 @@ class Favorite(models.Model):
     Represents a user's favorite posts.
     """
 
-    user = models.ForeignKey(
-        User, related_name='favorites', on_delete=models.CASCADE
-    )
-    post = models.ForeignKey(
-        Post, related_name='favorites', on_delete=models.CASCADE
-    )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'post')
         ordering = ['-created_at']
+        unique_together = ('owner', 'post')
 
     def __str__(self):
-        return f'{self.user.username} -> {self.post.title}'
+        return f"{self.owner} favorite {self.post}"
