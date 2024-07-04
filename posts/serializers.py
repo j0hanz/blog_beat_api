@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Post, Favorite
+from .models import Post, Favorite
 from likes.models import Like
 import datetime
 
