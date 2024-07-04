@@ -1,7 +1,24 @@
 from rest_framework import serializers
 from posts.models import Post
 from likes.models import Like
-from django.contrib.humanize.templatetags.humanize import naturaltime
+import datetime
+
+
+def shortnaturaltime(value):
+    """
+    Convert a datetime value into a short, human-readable format.
+    """
+    now = datetime.datetime.now(datetime.timezone.utc)
+    delta = now - value
+
+    if delta < datetime.timedelta(minutes=1):
+        return 'just now'
+    elif delta < datetime.timedelta(hours=1):
+        return f'{int(delta.total_seconds() // 60)}m'
+    elif delta < datetime.timedelta(days=1):
+        return f'{int(delta.total_seconds() // 3600)}h'
+    else:
+        return f'{delta.days}d'
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -15,7 +32,7 @@ class PostSerializer(serializers.ModelSerializer):
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
-    comments_count = serializers.ReadOnlyField()  # Same as likes_count
+    comments_count = serializers.ReadOnlyField()
     is_favourited = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
@@ -79,13 +96,13 @@ class PostSerializer(serializers.ModelSerializer):
         """
         Return the time since the post was created in a human-readable format.
         """
-        return naturaltime(obj.created_at)
+        return shortnaturaltime(obj.created_at)
 
     def get_updated_at(self, obj):
         """
         Return the time since the post was updated in a human-readable format.
         """
-        return naturaltime(obj.updated_at)
+        return shortnaturaltime(obj.updated_at)
 
     class Meta:
         model = Post
