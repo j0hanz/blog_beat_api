@@ -17,6 +17,7 @@ class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
+        favorites_count=Count('favorites', distinct=True),
     ).order_by('-created_at')
     filter_backends = [
         filters.OrderingFilter,
@@ -26,6 +27,7 @@ class PostList(generics.ListCreateAPIView):
     filterset_fields = [
         'owner__followed__owner__profile',
         'likes__owner__profile',
+        'favorites__owner__profile',
         'owner__profile',
     ]
     search_fields = ['owner__username', 'title']
@@ -40,7 +42,7 @@ class PostList(generics.ListCreateAPIView):
         queryset = super().get_queryset()
         user = self.request.user
         if 'favorites' in self.request.query_params and user.is_authenticated:
-            queryset = queryset.filter(favorite__owner=user)
+            queryset = queryset.filter(favorites__owner=user)
         return queryset
 
     def perform_create(self, serializer):
@@ -57,7 +59,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.annotate(
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comments', distinct=True),
-        favorites_count=Count('favorite', distinct=True),
+        favorites_count=Count('favorites', distinct=True),
     ).order_by('-created_at')
 
 
