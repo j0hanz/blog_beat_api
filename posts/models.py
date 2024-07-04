@@ -34,9 +34,6 @@ class Post(models.Model):
         max_length=32, choices=IMAGE_FILTER_CHOICES, default='normal'
     )
     location = models.CharField(max_length=150, blank=True)
-    favourites = models.ManyToManyField(
-        User, blank=True, related_name='favourite_posts'
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -45,3 +42,24 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.id} {self.title}'
+
+
+class Favorite(models.Model):
+    """
+    Represents a user's favorite posts.
+    """
+
+    user = models.ForeignKey(
+        User, related_name='favorites', on_delete=models.CASCADE
+    )
+    post = models.ForeignKey(
+        Post, related_name='favorites', on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.user.username} -> {self.post.title}'
