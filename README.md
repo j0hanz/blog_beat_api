@@ -1,8 +1,8 @@
 ### Database Structure
 
-This document provides a detailed overview of Blog Beat's database schema, including the tables, their attributes, and the relationships between them. The database stores information about users, profiles, posts, comments, likes, favorites, followers, and social media links.
+This document provides a detailed overview of Blog Beat's database schema, including the tables, their attributes, and the relationships between them. The database stores information about users, profiles, posts, comments, likes, favorites, and followers.
 
-![Blog Beat API](https://github.com/j0hanz/blog_beat_api/assets/159924955/24f39e32-d3ab-462d-988b-136f5fa4fef0)
+![erd](https://github.com/j0hanz/blog_beat_api/assets/159924955/6b11144b-f52f-4ab2-99df-9b07f1758f1a)
 
 ---
 
@@ -13,6 +13,7 @@ This document provides a detailed overview of Blog Beat's database schema, inclu
         * id (BigAuto): Primary Key.
         * username (CharField).
         * password (CharField).
+
 * **Profile:** Contains detailed user profile information.
     * Attributes:
         * id (BigAuto): Primary Key.
@@ -24,6 +25,7 @@ This document provides a detailed overview of Blog Beat's database schema, inclu
         * image (ImageField).
         * created_at (DateTimeField).
         * updated_at (DateTimeField).
+
 * **Post:** Stores user-generated content.
     * Attributes:
         * id (BigAuto): Primary Key.
@@ -35,13 +37,14 @@ This document provides a detailed overview of Blog Beat's database schema, inclu
         * location (CharField).
         * created_at (DateTimeField).
         * updated_at (DateTimeField).
-        * favourites (ManyToManyField): Many-to-many relationship with User (users who favourited this post).
+
 * **Like:** Records user likes on posts.
     * Attributes:
         * id (BigAuto): Primary Key.
         * owner (ForeignKey): Foreign Key referencing User.id (user who liked the post).
         * post (ForeignKey): Foreign Key referencing Post.id (post being liked).
         * created_at (DateTimeField).
+
 * **Comment:** Stores user comments on posts.
     * Attributes:
         * id (BigAuto): Primary Key.
@@ -50,18 +53,20 @@ This document provides a detailed overview of Blog Beat's database schema, inclu
         * content (TextField).
         * created_at (DateTimeField).
         * updated_at (DateTimeField).
+
 * **Follower:** Tracks user follow relationships.
     * Attributes:
         * id (BigAuto): Primary Key.
         * owner (ForeignKey): Foreign Key referencing User.id (user who follows someone).
         * followed (ForeignKey): Foreign Key referencing User.id (user being followed).
         * created_at (DateTimeField).
-* **SocialMediaLink:** Stores links to social media profiles of a user.
+
+* **Favorite:** Tracks user favorite posts.
     * Attributes:
         * id (BigAuto): Primary Key.
-        * owner (ForeignKey): Foreign Key referencing User.id (user who owns the link).
-        * platform (CharField).
-        * url (URLField).
+        * owner (ForeignKey): Foreign Key referencing User.id (user who favorited the post).
+        * post (ForeignKey): Foreign Key referencing Post.id (post being favorited).
+        * created_at (DateTimeField).
 
 ### Relationships
 
@@ -70,5 +75,6 @@ This document provides a detailed overview of Blog Beat's database schema, inclu
 * A User can create many Posts (one-to-many relationship).
 * A User can like many Posts (many-to-many relationship) through Like.
 * A User can comment on many Posts (many-to-many relationship) through Comment.
-* A User can favorite many Posts (many-to-many relationship) through the favourites field of Post.
-* A User can have many SocialMediaLinks (one-to-many relationship).
+* A User can favorite many Posts (many-to-many relationship) through Favorite.
+
+---
