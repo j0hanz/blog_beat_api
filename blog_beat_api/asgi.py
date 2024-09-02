@@ -1,5 +1,4 @@
-"""
-ASGI config for blog_beat_api project.
+"""ASGI config for blog_beat_api project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

@@ -1,13 +1,11 @@
-from django.db import models
-from django_countries.fields import CountryField
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
+from django_countries.fields import CountryField
 
 
 class Profile(models.Model):
-    """
-    Represents a user's profile with personal information and an image.
-    """
+    """Represents a user's profile with personal information and an image."""
 
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, blank=True)
@@ -15,7 +13,9 @@ class Profile(models.Model):
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/', default='images/nobody.webp', blank=True
+        upload_to='images/',
+        default='images/nobody.webp',
+        blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,14 +23,12 @@ class Profile(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.owner}'s profile"
 
 
-def create_profile(sender, instance, created, **kwargs):
-    """
-    Function to create a profile once a user is created.
-    """
+def create_profile(sender, instance, created, **kwargs) -> None:
+    """Function to create a profile once a user is created."""
     if created:
         Profile.objects.create(owner=instance)
 

@@ -1,5 +1,4 @@
-"""
-WSGI config for blog_beat_api project.
+"""WSGI config for blog_beat_api project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

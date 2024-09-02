@@ -1,16 +1,16 @@
 from django.db.models import Count
-from rest_framework import generics, permissions, filters, status
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Post, Favorite
-from .serializers import PostSerializer, FavoriteSerializer
+from rest_framework import filters, generics, permissions, status
+from rest_framework.response import Response
+
 from blog_beat_api.permissions import IsOwnerOrReadOnly
+
+from .models import Favorite, Post
+from .serializers import FavoriteSerializer, PostSerializer
 
 
 class PostList(generics.ListCreateAPIView):
-    """
-    View for listing and creating posts.
-    """
+    """View for listing and creating posts."""
 
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -45,14 +45,12 @@ class PostList(generics.ListCreateAPIView):
             queryset = queryset.filter(favorites__owner=user)
         return queryset
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer) -> None:
         serializer.save(owner=self.request.user)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    View for retrieving, updating, and deleting posts.
-    """
+    """View for retrieving, updating, and deleting posts."""
 
     serializer_class = PostSerializer
     permission_classes = [IsOwnerOrReadOnly]
@@ -64,9 +62,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FavoritePost(generics.GenericAPIView):
-    """
-    View for adding or removing a post from favorites.
-    """
+    """View for adding or removing a post from favorites."""
 
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
@@ -76,19 +72,19 @@ class FavoritePost(generics.GenericAPIView):
         post = Post.objects.get(pk=kwargs['pk'])
         user = request.user
         favorite, created = Favorite.objects.get_or_create(
-            owner=user, post=post
+            owner=user,
+            post=post,
         )
         if created:
             return Response(
                 {'status': 'added to favorites'},
                 status=status.HTTP_201_CREATED,
             )
-        else:
-            favorite.delete()
-            return Response(
-                {'status': 'removed from favorites'},
-                status=status.HTTP_204_NO_CONTENT,
-            )
+        favorite.delete()
+        return Response(
+            {'status': 'removed from favorites'},
+            status=status.HTTP_204_NO_CONTENT,
+        )
 
     def delete(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
@@ -101,5 +97,6 @@ class FavoritePost(generics.GenericAPIView):
                 status=status.HTTP_204_NO_CONTENT,
             )
         return Response(
-            {'status': 'not in favorites'}, status=status.HTTP_400_BAD_REQUEST
+            {'status': 'not in favorites'},
+            status=status.HTTP_400_BAD_REQUEST,
         )

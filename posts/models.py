@@ -1,11 +1,9 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Post(models.Model):
-    """
-    Represents a user's post with an image, content, and optional image filter.
-    """
+    """Represents a user's post with an image, content, and optional image filter."""
 
     IMAGE_FILTER_CHOICES = [
         ('_1977', '1977'),
@@ -25,13 +23,17 @@ class Post(models.Model):
     ]
 
     owner = models.ForeignKey(
-        User, related_name='posts', on_delete=models.CASCADE
+        User,
+        related_name='posts',
+        on_delete=models.CASCADE,
     )
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False)
     image = models.ImageField(upload_to='images/', blank=True)
     image_filter = models.CharField(
-        max_length=32, choices=IMAGE_FILTER_CHOICES, default='normal'
+        max_length=32,
+        choices=IMAGE_FILTER_CHOICES,
+        default='normal',
     )
     location = models.CharField(max_length=150, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -40,18 +42,18 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.id} {self.title}'
 
 
 class Favorite(models.Model):
-    """
-    Represents a user's favorite posts.
-    """
+    """Represents a user's favorite posts."""
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(
-        Post, related_name='favorites', on_delete=models.CASCADE
+        Post,
+        related_name='favorites',
+        on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -59,5 +61,5 @@ class Favorite(models.Model):
         ordering = ['-created_at']
         unique_together = ('owner', 'post')
 
-    def __str__(self):
-        return f"{self.owner} favorites {self.post}"
+    def __str__(self) -> str:
+        return f'{self.owner} favorites {self.post}'
