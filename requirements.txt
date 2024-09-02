@@ -28,4 +28,3 @@ pytz==2024.1
 requests-oauthlib==2.0.0
 sqlparse==0.5.1
 swapper==1.4.0
-whitenoise==6.7.0
