@@ -3,16 +3,16 @@ from rest_framework import serializers
 
 
 class CurrentUserSerializer(UserDetailsSerializer):
-    """
-    Serializer for the current authenticated user.
-    Credit: Code Institute django rest walkthrough project
+    """Serializer for the current authenticated user.
+    Credit: Code Institute django rest walkthrough project.
     """
 
     profile_id = serializers.ReadOnlyField(source='profile.id')
     profile_image = serializers.ReadOnlyField(source='profile.image.url')
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + (
+        fields = (
+            *UserDetailsSerializer.Meta.fields,
             'profile_id',
             'profile_image',
         )

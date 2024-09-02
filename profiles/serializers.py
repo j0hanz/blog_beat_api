@@ -1,12 +1,13 @@
-from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
-from .models import Profile
+from rest_framework import serializers
+
 from followers.models import Follower
+
+from .models import Profile
 
 
 class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
-    """
-    Serializer for the Profile model.
+    """Serializer for the Profile model.
     This serializer handles creating and updating of profiles.
     """
 
@@ -25,7 +26,8 @@ class ProfileSerializer(CountryFieldMixin, serializers.ModelSerializer):
         user = self.context['request'].user
         if user.is_authenticated:
             following = Follower.objects.filter(
-                owner=user, followed=obj.owner
+                owner=user,
+                followed=obj.owner,
             ).first()
             return following.id if following else None
         return None
