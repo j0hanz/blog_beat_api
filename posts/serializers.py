@@ -58,7 +58,7 @@ class PostSerializer(serializers.ModelSerializer):
         Validate the title field to ensure it is not empty.
         """
         if not value.strip():
-            raise serializers.ValidationError("Title cannot be empty.")
+            raise serializers.ValidationError('Title cannot be empty.')
         return value
 
     def validate_content(self, value):
@@ -66,7 +66,7 @@ class PostSerializer(serializers.ModelSerializer):
         Validate the content field to ensure it is not empty.
         """
         if not value.strip():
-            raise serializers.ValidationError("Post content cannot be empty.")
+            raise serializers.ValidationError('Post content cannot be empty.')
         return value
 
     def get_like_id(self, obj):
