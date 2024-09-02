@@ -46,7 +46,7 @@ if 'DEV' not in os.environ:
 REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': False,
-    'JWT_AUTH_COOKIE': "auth-token",
+    'JWT_AUTH_COOKIE': 'auth-token',
     'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
     'JWT_AUTH_SECURE': True,
     'JWT_AUTH_SAMESITE': 'None',
@@ -80,7 +80,7 @@ if 'CLIENT_ORIGIN' in os.environ:
     ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https://.*\.codeinstitute-ide\.net$",
+        r'^https://.*\.codeinstitute-ide\.net$',
     ]
 
 CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
@@ -164,12 +164,12 @@ if 'DEV' in os.environ:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-    print("connected to db.sqlite3")
+    print('connected to db.sqlite3')
 else:
     DATABASES = {
-        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-    print("connected to external database")
+    print('connected to external database')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
