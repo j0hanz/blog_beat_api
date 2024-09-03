@@ -21,5 +21,5 @@ class FollowerSerializer(serializers.ModelSerializer):
             return super().create(validated_data)
         except IntegrityError as err:
             raise serializers.ValidationError(
-                {'detail': 'possible duplicate'}
+                {'detail': 'possible duplicate'},
             ) from err
