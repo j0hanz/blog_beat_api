@@ -5,6 +5,9 @@ from rest_framework import serializers
 from likes.models import Like
 from posts.models import Favorite, Post
 
+MAX_IMAGE_SIZE = 2 * 1024 * 1024  # 2MB in bytes
+MAX_IMAGE_DIMENSION = 4096  # pixels
+
 
 def shortnaturaltime(value) -> str:
     """Convert a datetime value into a short, human-readable format."""
@@ -36,19 +39,17 @@ class PostSerializer(serializers.ModelSerializer):
 
     def validate_image(self, value):
         """Validate the image field to ensure it meets size and dimension constraints."""
-        if value.size > 2 * 1024 * 1024:
-            msg = 'Image size larger than 2MB!'
+        if value.size > MAX_IMAGE_SIZE:
+            msg = (
+                f'Image size larger than {MAX_IMAGE_SIZE // (1024 * 1024)}MB!'
+            )
             raise serializers.ValidationError(msg)
-        if value.image.height > 4096:
-            msg = 'Image height larger than 4096px!'
-            raise serializers.ValidationError(
-                msg,
-            )
-        if value.image.width > 4096:
-            msg = 'Image width larger than 4096px!'
-            raise serializers.ValidationError(
-                msg,
-            )
+        if value.image.height > MAX_IMAGE_DIMENSION:
+            msg = f'Image height larger than {MAX_IMAGE_DIMENSION}px!'
+            raise serializers.ValidationError(msg)
+        if value.image.width > MAX_IMAGE_DIMENSION:
+            msg = f'Image width larger than {MAX_IMAGE_DIMENSION}px!'
+            raise serializers.ValidationError(msg)
         return value
 
     def validate_title(self, value):
