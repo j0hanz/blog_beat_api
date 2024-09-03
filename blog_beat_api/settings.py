@@ -16,6 +16,40 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        (
+            'rest_framework.authentication.SessionAuthentication'
+            if 'DEV' in os.environ
+            else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+        ),
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,
+    'DATETIME_FORMAT': '%a %d-%m-%Y %H:%M',
+}
+if 'DEV' not in os.environ:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': False,
+    'JWT_AUTH_COOKIE': 'auth-token',
+    'JWT_AUTH_REFRESH_COOKIE': 'refresh-token',
+    'JWT_AUTH_SECURE': True,
+    'JWT_AUTH_SAMESITE': 'None',
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer',
+}
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -28,6 +62,23 @@ ALLOWED_HOSTS = [
     '.codeinstitute-ide.net',
 ]
 
+
+# CORS settings
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV'),
+    ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r'^https://.*\.codeinstitute-ide\.net$',
+    ]
+
+CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'cloudinary_storage',
     'cloudinary',
     'rest_framework',
@@ -46,7 +98,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'django_filters',
     'corsheaders',
     'django_countries',
     'profiles',
@@ -61,6 +112,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -88,9 +140,15 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.codeinstitute-ide.net',
+    'https://*.herokuapp.com',
+]
+
 WSGI_APPLICATION = 'blog_beat_api.wsgi.application'
 
-# Database configuration
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 if 'DEV' in os.environ:
     DATABASES = {
         'default': {
@@ -104,6 +162,7 @@ else:
     }
 
 # Password validation
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -120,64 +179,23 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'Europe/Stockholm'
+
 USE_I18N = True
+
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# WhiteNoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        (
-            'rest_framework.authentication.SessionAuthentication'
-            if 'DEV' in os.environ
-            else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
-        ),
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 12,
-    'DATETIME_FORMAT': '%a %d-%m-%Y %H:%M',
-}
-
-if 'DEV' not in os.environ:
-    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
-        'rest_framework.renderers.JSONRenderer',
-    ]
-
-REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_SECURE': True,
-    'JWT_AUTH_COOKIE': 'my-app-auth',
-    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
-    'JWT_AUTH_SAMESITE': 'None',
-    'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer',
-}
-
-# CORS settings
-if 'CLIENT_ORIGIN' in os.environ:
-    CORS_ALLOWED_ORIGINS = [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV'),
-    ]
-else:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        r'^https://.*\.codeinstitute-ide\.net',
-    ]
-
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.codeinstitute-ide.net',
-    'https://*.herokuapp.com',
-]
