@@ -13,7 +13,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=255, blank=True)
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
-    image = CloudinaryField('image', default='image_wcjcx2', blank=True)
+    image = CloudinaryField('image', default='nobody_image_wcjcx2', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
