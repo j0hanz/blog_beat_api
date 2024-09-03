@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -29,7 +30,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False)
-    image = models.ImageField(upload_to='images/', blank=True)
+    image = CloudinaryField('image', blank=True, null=True)
     image_filter = models.CharField(
         max_length=32,
         choices=IMAGE_FILTER_CHOICES,
