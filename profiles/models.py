@@ -14,9 +14,7 @@ class Profile(models.Model):
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/',
-        default='/static/images/nobody.webp',
-        blank=True,
+        upload_to='images/', default='../nobody_image_ij7rzz'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
