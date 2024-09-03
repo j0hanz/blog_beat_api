@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -13,9 +14,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=50, blank=True)
     country = CountryField(blank=True)
     bio = models.TextField(blank=True)
-    image = models.ImageField(
-        upload_to='images/', default='../nobody_image_ij7rzz'
-    )
+    image = CloudinaryField('image', default='nobody_image_ij7rzz', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
