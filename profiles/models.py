@@ -14,8 +14,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     image = models.ImageField(
         upload_to='images/',
-        default='nobody_image_ij7rzz',
-        blank=True,
+        default='../nobody_image_ij7rzz',
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
