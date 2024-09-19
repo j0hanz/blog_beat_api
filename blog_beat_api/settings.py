@@ -4,12 +4,12 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from dotenv import load_dotenv
 
-if os.path.isfile('env.py'):
-    import env
+load_dotenv()
 
 # Cloudinary settings
-CLOUDINARY_STORAGE = {'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')}
+CLOUDINARY_STORAGE = {'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL')}
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -44,21 +44,24 @@ REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer',
 }
 
+# Secret key
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+# Django settings
 DEBUG = 'DEV' in os.environ
 
+# Allowed hosts settings
 ALLOWED_HOSTS = [
-    os.environ.get('ALLOWED_HOST'),
+    os.getenv('ALLOWED_HOST'),
     'localhost',
-    '.codeinstitute-ide.net',
+    '127.0.0.1',
 ]
 
 # CORS settings
 if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV'),
+        os.getenv('CLIENT_ORIGIN'),
+        os.getenv('CLIENT_ORIGIN_DEV'),
     ]
 else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
@@ -66,7 +69,6 @@ else:
     ]
 
 CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
-
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -100,6 +102,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+# Middleware settings
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -114,6 +117,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'blog_beat_api.urls'
 
+# Templates settings
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -130,6 +134,7 @@ TEMPLATES = [
     },
 ]
 
+# CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     'https://*.codeinstitute-ide.net',
     'https://*.herokuapp.com',
@@ -143,12 +148,14 @@ if 'DEV' in os.environ:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
-        },
+        }
     }
+    print('SQLite database')
 else:
     DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL')),
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
     }
+    print('Production database')
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
