@@ -2,19 +2,26 @@ image:
   file: .gitpod.dockerfile
 
 tasks:
-  - init: . ${GITPOD_REPO_ROOT}/.vscode/init_tasks.sh
-    command: |
+  - command: |
       /home/gitpod/.pg_ctl/bin/pg_start > /dev/null
-      pip3 freeze > requirements.txt
+
   - name: Install VS Code Extensions
     command: |
       for file in .vscode/extensions/*.vsix; do
-        code --install-extension "$file"
+        code --install-extension "$file" || true
       done
-  - command: . ${GITPOD_REPO_ROOT}/.vscode/uptime.sh &
 
 vscode:
   extensions:
     - PKief.material-icon-theme
     - charliermarsh.ruff
     - ms-python.python
+    - batisteo.vscode-django
+    - esbenp.prettier-vscode
+    - eamodio.gitlens
+    - mhutchie.git-graph
+    - donjayamanne.githistory
+    - formulahendry.auto-close-tag
+    - formulahendry.auto-rename-tag
+    - christian-kohler.path-intellisense
+    - yzhang.markdown-all-in-one
