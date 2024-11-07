@@ -3,11 +3,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('posts/', views.PostList.as_view()),
-    path('posts/<int:pk>/', views.PostDetail.as_view()),
+    path('', views.PostList.as_view()),
+    path('<int:pk>/', views.PostDetail.as_view()),
     path(
-        'posts/<int:pk>/favourite/',
+        '<int:pk>/favourite/',
         views.FavoritePost.as_view(),
-        name='post-favourite',
     ),
 ]
