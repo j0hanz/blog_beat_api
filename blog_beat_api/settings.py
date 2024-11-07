@@ -6,73 +6,26 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
-# Cloudinary settings
-CLOUDINARY_STORAGE = {'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL')}
-MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        (
-            'rest_framework.authentication.SessionAuthentication'
-            if 'DEV' in os.environ
-            else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
-        )
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 12,
-    'DATETIME_FORMAT': '%a %d-%m-%Y %H:%M',
-}
-if 'DEV' not in os.environ:
-    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
-        'rest_framework.renderers.JSONRenderer',
-    ]
-
-REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_SECURE': True,
-    'JWT_AUTH_HTTPONLY': False,
-    'JWT_AUTH_COOKIE': 'my-app-auth',
-    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
-    'JWT_AUTH_SAMESITE': 'None',
-    'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer',
-}
-
-# Secret key
+# Secret Key
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# Django settings
+# Debug mode
 DEBUG = 'DEV' in os.environ
 
-# Allowed hosts settings
+# Allowed Hosts
 ALLOWED_HOSTS = [
     os.getenv('ALLOWED_HOST'),
     'localhost',
     '127.0.0.1',
 ]
 
-# CORS settings
-if 'CLIENT_ORIGIN' in os.environ:
-    CORS_ALLOWED_ORIGINS = [
-        os.getenv('CLIENT_ORIGIN'),
-        os.getenv('CLIENT_ORIGIN_DEV'),
-    ]
-else:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        r'^https://.*\.codeinstitute-ide\.net$',
-    ]
-
-CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-
-# Application definition
+# Installed Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -102,7 +55,7 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
-# Middleware settings
+# Middleware
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -115,9 +68,10 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+# URL Configuration
 ROOT_URLCONF = 'blog_beat_api.urls'
 
-# Templates settings
+# Templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -134,15 +88,10 @@ TEMPLATES = [
     },
 ]
 
-# CSRF settings
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.codeinstitute-ide.net',
-    'https://*.herokuapp.com',
-]
-
+# WSGI Application
 WSGI_APPLICATION = 'blog_beat_api.wsgi.application'
 
-# Database
+# Database Configuration
 if 'DEV' in os.environ:
     DATABASES = {
         'default': {
@@ -152,38 +101,67 @@ if 'DEV' in os.environ:
     }
     print('SQLite database')
 else:
-    DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
-    }
+    DATABASES = {'default': dj_database_url.parse(os.getenv('DATABASE_URL'))}
     print('Production database')
 
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+# Authentication and REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        (
+            'rest_framework.authentication.SessionAuthentication'
+            if 'DEV' in os.environ
+            else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+        )
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,
+    'DATETIME_FORMAT': '%a %d-%m-%Y %H:%M',
+}
+if 'DEV' not in os.environ:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
+        'rest_framework.renderers.JSONRenderer',
+    ]
+
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_SECURE': True,
+    'JWT_AUTH_HTTPONLY': False,
+    'JWT_AUTH_COOKIE': 'my-app-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'JWT_AUTH_SAMESITE': 'None',
+    'USER_DETAILS_SERIALIZER': 'blog_beat_api.serializers.CurrentUserSerializer',
+}
+
+# CORS and CSRF
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.getenv('CLIENT_ORIGIN'),
+        os.getenv('CLIENT_ORIGIN_DEV'),
+    ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r'^https://.*\.codeinstitute-ide\.net$',
+    ]
+CORS_ALLOWED_ORIGINS = ['https://*.herokuapp.com']
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.codeinstitute-ide.net',
+    'https://*.herokuapp.com',
 ]
 
-# Internationalization
+# Static and Media Files
+STATIC_URL = '/static/'
+CLOUDINARY_STORAGE = {'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL')}
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Internationalization and Localization
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Stockholm'
-
 USE_I18N = True
-
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-
-# Default primary key field type
+# Django-specific Settings
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
