@@ -81,9 +81,6 @@ RUN mkdir -p ~/.pg_ctl/bin ~/.pg_ctl/sockets && \
     echo '#!/bin/bash\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" stop' > ~/.pg_ctl/bin/pg_stop && \
     chmod +x ~/.pg_ctl/bin/*
 
-# Health checks
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD pg_isready -U postgres || exit 1
-
 # Install Heroku CLI
 RUN curl https://cli-assets.heroku.com/install.sh | sh
 
