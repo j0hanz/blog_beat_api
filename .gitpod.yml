@@ -1,13 +1,12 @@
 image:
   file: .gitpod.dockerfile
-
 tasks:
   - command: |
+      export IDE_METRICS_API_DISABLED=true
       for file in .vscode/extensions/*.vsix; do
         code --install-extension "$file"
       done
       pip install -r requirements.txt
-
 vscode:
   extensions:
     - ms-python.debugpy
