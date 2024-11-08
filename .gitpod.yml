@@ -2,8 +2,13 @@ image:
   file: .gitpod.dockerfile
 tasks:
   - name: Setup Environment
-    command: |
+    init: |
+      pip install --upgrade pip
       pip install -r requirements.txt
+    command: |
+      for file in .vscode/extensions/*.vsix; do
+        code --install-extension "$file" || true
+      done
 vscode:
   extensions:
     - ms-python.debugpy
