@@ -1,12 +1,15 @@
 image:
   file: .gitpod.dockerfile
 tasks:
+  - init: |
+      echo "Initializing Gitpod workspace..."
+      pip install --upgrade pip
+      pip install -r requirements.txt
   - command: |
-      export IDE_METRICS_API_DISABLED=true
       for file in .vscode/extensions/*.vsix; do
         code --install-extension "$file"
       done
-      pip install -r requirements.txt
+      echo "Setup complete."
 vscode:
   extensions:
     - ms-python.debugpy
