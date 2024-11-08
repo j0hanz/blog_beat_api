@@ -1,15 +1,14 @@
 image:
   file: .gitpod.dockerfile
 tasks:
-  - init: |
-      echo "Initializing Gitpod workspace..."
-      pip install --upgrade pip
+  - init: echo "Initializing Gitpod workspace..."
+    command: |
       pip install -r requirements.txt
-  - command: |
+  - name: Install VS Code Extensions
+    command: |
       for file in .vscode/extensions/*.vsix; do
         code --install-extension "$file"
       done
-      echo "Setup complete."
 vscode:
   extensions:
     - ms-python.debugpy
