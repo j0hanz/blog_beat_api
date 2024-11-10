@@ -43,7 +43,7 @@ RUN curl -fsSL https://pyenv.run | bash && \
     pyenv global $PYTHON_VERSION && \
     pip install --no-cache-dir pip && \
     pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir bandit coverage djlint ipython isort mypy pylint pyparsing pydot pip-review pytest pytest-django requests ruff watchdog && \
+    pip install --no-cache-dir bandit coverage djlint ipython isort idna mypy pylint pyparsing pydot pip-review pytest pytest-django requests ruff watchdog && \
     sudo rm -rf /tmp/*
 
 ENV PYTHONUSERBASE=/workspace/.pip-modules \
