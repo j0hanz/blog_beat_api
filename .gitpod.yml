@@ -9,6 +9,7 @@ tasks:
         code --install-extension "$file" || echo "❌ Failed to install $file"
       done
       echo "🚀 Running environment check script (check_installations.sh)..."
+      chmod +x .vscode/check_installations.sh
       .vscode/check_installations.sh
       echo "✅ Setup complete!"
 vscode:
