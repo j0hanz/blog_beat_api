@@ -1,19 +1,5 @@
 {
-  // Editor Settings
-  "editor.autoClosingBrackets": "always",
-  "editor.inlineSuggest.suppressSuggestions": true,
-  "editor.suggestSelection": "recentlyUsedByPrefix",
-  "editor.tabCompletion": "on",
-  "editor.wordWrap": "on",
-  "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
-  "editor.fontLigatures": true,
-
-  // Terminal Settings
-  "terminal.integrated.fontSize": 16,
-
-  // Auto-save
-  "files.autoSave": "afterDelay",
-  // File exclusions
+  // File Exclusions
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,
@@ -22,87 +8,99 @@
     "**/.hg": true,
     "**/.svn": true,
     "**/.vscode": true,
+    "**/CVS": true,
     "**/core.Microsoft*": true,
     "**/core.mongo*": true,
     "**/core.python*": true,
-    "**/CVS": true,
-    "pyproject.toml": true,
-    ".ruff_cache": true,
-    ".pytest_cache": true,
     ".coverage": true,
-    "Makefile": true
+    ".pytest_cache": true,
+    ".ruff_cache": true,
+    "Makefile": true,
+    "pyproject.toml": true
   },
 
-  // Default formatter
+  // Editor Settings
+  "editor.autoClosingBrackets": "always",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 16,
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.suppressSuggestions": true,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.tabCompletion": "on",
+  "editor.wordWrap": "on",
+  "files.autoSave": "afterDelay",
 
-  // Python-specific settings
+  // Terminal Settings
+  "terminal.integrated.fontSize": 16,
+
+  // Formatters for Specific Languages
+  "[django-html]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[handlebars]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[hbs]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[html]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jinja]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[jinja-html]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[markdown]": { "editor.defaultFormatter": "DavidAnson.vscode-markdownlint" },
+  "[mustache]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[nj]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[njk]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[nunjucks]": { "editor.defaultFormatter": "monosans.djlint" },
   "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.organizeImports": "explicit"
-    },
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "[twig]": { "editor.defaultFormatter": "monosans.djlint" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
 
-  // HTML and template languages settings
-  "[html][django-html][handlebars][hbs][mustache][jinja][jinja-html][nj][njk][nunjucks][twig]": {
-    "editor.defaultFormatter": "monosans.djlint"
-  },
-
-  // Markdown settings
-  "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
-    "editor.wordWrap": "on",
-    "editor.quickSuggestions": {
-      "comments": "on",
-      "strings": "on",
-      "other": "on"
-    },
-    "editor.suggestSelection": "first",
-    "editor.tabSize": 2,
-    "editor.renderWhitespace": "all",
-    "files.trimTrailingWhitespace": true
-  },
-
-  // Prettier settings
-  "prettier.singleQuote": true,
-  "prettier.semi": true,
-  "prettier.trailingComma": "all",
+  // Prettier Settings
   "prettier.arrowParens": "always",
-  "prettier.printWidth": 80,
-  "prettier.tabWidth": 2,
-  "prettier.useTabs": false,
   "prettier.endOfLine": "lf",
+  "prettier.printWidth": 80,
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "es5",
+  "prettier.useTabs": false,
 
-  // ESLint settings
+  // ESLint Settings
   "eslint.format.enable": true,
+  "eslint.options": {
+    "extensions": [".js", ".jsx", ".ts", ".tsx"]
+  },
   "eslint.validate": [
     "javascript",
     "javascriptreact",
     "typescript",
     "typescriptreact"
   ],
-  "eslint.options": {
-    "extensions": [".js", ".jsx", ".ts", ".tsx"]
-  },
 
-  // Disable built-in formatters
-  "javascript.format.enable": false,
-  "typescript.format.enable": false,
-
-  // CSS settings
+  // CSS and Emmet Settings
   "css.lint.unknownAtRules": "ignore",
+  "css.validate": false,
+  "emmet.includeLanguages": { "django-html": "html" },
 
-  // Emmet settings
-  "emmet.includeLanguages": {
-    "django-html": "html"
-  },
-
-  // Workspace settings
-  "workbench.iconTheme": "material-icon-theme",
-  "git.autofetch": true,
-  "explorer.confirmDragAndDrop": false,
+  // UI and Git Settings
   "diffEditor.ignoreTrimWhitespace": false,
-  "editor.fontSize": 16,
+  "explorer.confirmDragAndDrop": false,
+  "git.autofetch": true,
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.iconTheme": "material-icon-theme",
+
+  // Additional Extensions
+  "djlint.showInstallError": false,
+  "markdown-preview-enhanced.previewTheme": "github-dark.css",
+  "markdown-preview-enhanced.scrollSync": false,
+  "markdown-preview-github-styles.colorTheme": "dark",
+
+  // Black Formatter Settings
+  "black-formatter.args": ["--line-length", "79", "--skip-string-normalization"]
 }
