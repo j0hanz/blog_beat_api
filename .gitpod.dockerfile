@@ -35,23 +35,23 @@ RUN sudo install-packages python3-pip && \
     pyenv global $PYTHON_VERSION && \
     python3 -m pip install --no-cache-dir --upgrade pip setuptools wheel && \
     python3 -m pip install --no-cache-dir --upgrade \
-        bandit \
-        coverage \
-        djlint \
-        django-debug-toolbar \
-        ipython \
-        isort \
-        mypy \
-        pip-review \
-        pylint \
-        pyparsing \
-        pydot \
-        pytest \
-        pytest-django \
-        pytest-cov \
-        requests \
-        watchdog \
-        ruff && \
+    bandit \
+    coverage \
+    djlint \
+    django-debug-toolbar \
+    ipython \
+    isort \
+    mypy \
+    pip-review \
+    pylint \
+    pyparsing \
+    pydot \
+    pytest \
+    pytest-django \
+    pytest-cov \
+    requests \
+    watchdog \
+    ruff && \
     sudo rm -rf /tmp/*
 
 # Python user base setup
@@ -79,20 +79,5 @@ RUN sudo curl https://cli-assets.heroku.com/install.sh | sh
 # Allow React and Django REST Framework to run together on Gitpod
 ENV DANGEROUSLY_DISABLE_HOST_CHECK=true
 
-# Copy VS Code extensions
-COPY .vscode/extensions/ /home/gitpod/.vscode/extensions/
-
-# Change ownership to the gitpod user and set permissions
-RUN sudo chown -R gitpod:gitpod /home/gitpod/.vscode/extensions/ && \
-    chmod 644 /home/gitpod/.vscode/extensions/*.vsix
-
-# Ensure pyenv is initialized in all shell sessions
-RUN echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile && \
-    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile && \
-    echo 'eval "$(pyenv init -)"' >> ~/.bash_profile && \
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile && \
-    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile && \
-    echo 'eval "$(pyenv init -)"' >> ~/.profile && \
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && \
-    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
-    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+# Final cleanup
+RUN sudo apt-get autoremove -y && sudo apt-get clean -y
