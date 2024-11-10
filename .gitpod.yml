@@ -21,11 +21,11 @@ tasks:
       fi
       echo "🔍 Checking for requirements.txt file..."
       if [ -f requirements.txt ]; then
-        echo "📄 requirements.txt found. Updating..."
-        pip3 freeze > requirements.txt
-        echo "✅ requirements.txt updated!"
+        echo "📄 requirements.txt found. Installing..."
+        pip install -r requirements.txt
+        echo "✅ requirements.txt done!"
       else
-        echo "📄 requirements.txt not found. Skipping update."
+        echo "📄 requirements.txt not found. Skipping Install."
       fi
       echo "✅ Setup complete!"
 vscode:
