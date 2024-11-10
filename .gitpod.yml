@@ -6,11 +6,27 @@ tasks:
       echo "🔄 Installing VS Code extensions from .vsix files..."
       for file in .vscode/extensions/*.vsix; do
         echo "📦 Installing extension: $file"
-        code --install-extension "$file" || echo "❌ Failed to install $file"
+        if code --install-extension "$file"; then
+          echo "✅ Successfully installed: $file"
+        else
+          echo "❌ Failed to install: $file"
+        fi
       done
       echo "🚀 Running environment check script (check_installations.sh)..."
       chmod +x .vscode/check_installations.sh
-      .vscode/check_installations.sh
+      if .vscode/check_installations.sh; then
+        echo "✅ Environment check complete!"
+      else
+        echo "❌ Environment check failed!"
+      fi
+      echo "🔍 Checking for requirements.txt file..."
+      if [ -f requirements.txt ]; then
+        echo "📄 requirements.txt found. Updating..."
+        pip3 freeze > requirements.txt
+        echo "✅ requirements.txt updated!"
+      else
+        echo "📄 requirements.txt not found. Skipping update."
+      fi
       echo "✅ Setup complete!"
 vscode:
   extensions:
