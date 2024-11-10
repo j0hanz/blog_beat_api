@@ -1,18 +1,14 @@
 image:
   file: .gitpod.dockerfile
 tasks:
-  - init: |
+  - name: Install dependencies and extensions
+    init: |
       echo "Installing VS Code extensions from .vsix files..."
-      if [ -d "/home/gitpod/.vscode/extensions" ] && [ "$(ls -A /home/gitpod/.vscode/extensions/*.vsix 2>/dev/null)" ]; then
-        for file in /home/gitpod/.vscode/extensions/*.vsix; do
+        for file in .vscode/extensions/*.vsix; do
           echo "Installing extension: $file"
           code --install-extension "$file" || echo "Failed to install $file"
         done
-        echo "All .vsix extensions installed."
-      else
-        echo "No .vsix files found. Skipping installation."
-      fi
-      echo "Setup complete."
+        pip3 install -r requirements.txt
 vscode:
   extensions:
     - ms-python.debugpy
@@ -26,3 +22,4 @@ vscode:
     - christian-kohler.path-intellisense
     - yzhang.markdown-all-in-one
     - GitHub.github-vscode-theme
+    - batisteo.vscode-django
