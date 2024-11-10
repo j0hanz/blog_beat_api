@@ -1,14 +1,16 @@
 image:
-  file: .gitpod.dockerfile
+  file: .gitpod.Dockerfile
 tasks:
-  - name: Install dependencies and extensions
+  - name: Setup Environment
     init: |
-      echo "Installing VS Code extensions from .vsix files..."
-        for file in .vscode/extensions/*.vsix; do
-          echo "Installing extension: $file"
-          code --install-extension "$file" || echo "Failed to install $file"
-        done
-        pip3 install -r requirements.txt
+      echo "🔄 Installing VS Code extensions from .vsix files..."
+      for file in .vscode/extensions/*.vsix; do
+        echo "📦 Installing extension: $file"
+        code --install-extension "$file" || echo "❌ Failed to install $file"
+      done
+      echo "🚀 Running environment check script (check_installations.sh)..."
+      .vscode/check_installations.sh
+      echo "✅ Setup complete!"
 vscode:
   extensions:
     - ms-python.debugpy
