@@ -7,7 +7,7 @@ tasks:
       echo "🚀 Preparing Workspace Environment 🚀"
       echo "======================================"
       echo "🔄 Please wait while the setup is in progress..."
-      sleep 2
+      sleep 3
       echo "🚀 Running environment check script (check_installations.sh)..."
       chmod +x .vscode/check_installations.sh
       if .vscode/check_installations.sh; then
@@ -22,7 +22,7 @@ tasks:
       if compgen -G ".vscode/extensions/*.vsix" > /dev/null; then
         for file in .vscode/extensions/*.vsix; do
           echo "📦 Installing extension: $file"
-          if code --install-extension "$file"; then
+          if command -v code &> /dev/null && code --install-extension "$file"; then
             echo "✅ Successfully installed: $file"
           else
             echo "❌ Failed to install: $file. Please check the file or try installing manually."
@@ -63,4 +63,3 @@ vscode:
     - christian-kohler.path-intellisense
     - yzhang.markdown-all-in-one
     - GitHub.github-vscode-theme
-    - batisteo.vscode-django
