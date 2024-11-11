@@ -1,17 +1,13 @@
 image:
   file: .gitpod.Dockerfile
-
 tasks:
   - name: Setup Environment
     init: |
       echo "======================================"
       echo "🚀 Preparing Workspace Environment 🚀"
       echo "======================================"
-
       echo "🔄 Please wait while the setup is in progress..."
       sleep 2
-
-      # Check and run environment script
       echo "🚀 Running environment check script (check_installations.sh)..."
       chmod +x .vscode/check_installations.sh
       if .vscode/check_installations.sh; then
@@ -20,11 +16,8 @@ tasks:
         echo "❌ Environment check failed! Please review the issues above."
         exit 1
       fi
-
       sleep 1
       clear
-
-      # Install VS Code extensions from .vsix files
       echo "🔄 Installing VS Code extensions from .vsix files..."
       if compgen -G ".vscode/extensions/*.vsix" > /dev/null; then
         for file in .vscode/extensions/*.vsix; do
@@ -38,11 +31,8 @@ tasks:
       else
         echo "⚠️ No .vsix files found in .vscode/extensions. Skipping installation."
       fi
-
       sleep 1
       clear
-
-      # Check for requirements.txt and install dependencies
       echo "🔍 Checking for requirements.txt file..."
       if [ -f requirements.txt ]; then
         echo "📄 requirements.txt found. Installing dependencies..."
@@ -55,10 +45,8 @@ tasks:
       else
         echo "⚠️ requirements.txt not found. Skipping dependency installation."
       fi
-
       sleep 1
       clear
-
       echo "======================================"
       echo "✅ Setup Complete! Your environment is ready. ✅"
       echo "======================================"
