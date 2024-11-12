@@ -1,6 +1,6 @@
 import os
 import subprocess
-from datetime import datetime
+from datetime import UTC, datetime, timezone
 
 import fancy_text
 
@@ -47,16 +47,16 @@ def get_latest_commit_date():
         )
         commit_date = datetime.strptime(
             commit_date_str, '%a %b %d %H:%M:%S %Y %z'
-        ).date()
-        today = datetime.now().date()
-        delta = today - commit_date
+        )
+        now = datetime.now(UTC)
+        delta = (now - commit_date).days
 
-        if delta.days == 0:
+        if delta == 0:
             return 'today'
-        elif delta.days == 1:
+        elif delta == 1:
             return 'yesterday'
         else:
-            return f'{delta.days} d'
+            return f'{delta} d'
     except subprocess.CalledProcessError:
         return 'Unknown'
 
