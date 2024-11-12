@@ -11,7 +11,7 @@ sleep 5
 
 echo -n "🚀 Preparing workspace environment"
 for i in $(seq 1 10); do
-    sleep 1
+    sleep 0.75
     echo -n "."
 done
 echo
