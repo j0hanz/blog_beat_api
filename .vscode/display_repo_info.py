@@ -70,10 +70,11 @@ def main() -> None:
 
     # Display the repository information
     print(fancy_text.gitpod_info)
-    print(f'{"🔖Repo":<15} {repo_name:>27}')
-    print(f'{"🌿Branch":<15} {branch_name:>27}')
-    print(f'{"👤User":<15} {gitpod_user:>27}')
-    print(f'{"🕒Last Commit":<15} {commit_date:>27}')
+    print(f'{"🔖":<1} {"Repo":<15} {repo_name:>28}')
+    print(f'{"🌿":<1} {"Branch":<15} {branch_name:>28}')
+    print(f'{"👤":<1} {"User":<15} {gitpod_user:>28}')
+    print(f'{"🕒":<1} {"Last Commit":<15} {commit_date:>28}')
+    print("")
 
 
 if __name__ == '__main__':
