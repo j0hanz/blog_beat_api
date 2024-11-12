@@ -1,7 +1,5 @@
 FROM gitpod/workspace-base
 
-ENV TRIGGER_REBUILD=1
-
 # Environment variables
 ENV PYENV_ROOT="/home/gitpod/.pyenv"
 ENV PATH="$PYENV_ROOT/bin:$PATH:$PYENV_ROOT/shims"
