@@ -7,7 +7,7 @@
     "**/.gitp*": true,
     "**/.hg": true,
     "**/.svn": true,
-
+    "**/.vscode": true,
     "**/CVS": true,
     "**/core.Microsoft*": true,
     "**/core.mongo*": true,
