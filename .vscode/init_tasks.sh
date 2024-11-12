@@ -9,11 +9,9 @@ python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fanc
 # Set delay so user can see the initial message before the setup process starts
 sleep 5
 
-# Logging and fancy text output
-python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
 echo -n "🚀 Preparing workspace environment"
 for i in $(seq 1 10); do
-    sleep 0.5
+    sleep 1
     echo -n "."
 done
 echo
@@ -112,8 +110,6 @@ if [ $? -eq 0 ]; then
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo "✅ Setup complete! You are ready to start coding."
     echo ""
-    # Run display_repo_info.py
-    # python .vscode/display_repo_info.py
 else
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo "❌ Setup failed! Please check the logs and retry."
