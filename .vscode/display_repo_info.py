@@ -47,13 +47,12 @@ def main() -> None:
     print('─' * 41)
     print('      🚀 ɢɪᴛᴘᴏᴅ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ ɪɴꜰᴏ 🚀      ')
     print('─' * 41)
-    print('─' * 41)
-    print(f'🗂️ ʀᴇᴘᴏ           {repo_name:>23}')
-    print(f'🌿 ʙʀᴀɴᴄʜ         {branch_name:>23}')
-    print(f'👤 ᴜꜱᴇʀ           {gitpod_user:>23}')
-    print(f'📅 ʟᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ   {commit_date:>23}')
-    print('─' * 41)
-    print('─' * 41)
+    print('-' * 41)
+    print(f'Repo           {repo_name:>26}')
+    print(f'Branch         {branch_name:>26}')
+    print(f'User           {gitpod_user:>26}')
+    print(f'Last Updated   {commit_date:>26}')
+    print('-' * 41)
 
 
 if __name__ == '__main__':
