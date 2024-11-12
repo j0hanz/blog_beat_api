@@ -49,8 +49,11 @@ def main() -> None:
     print('─' * 41)
     print('-' * 41)
     print(f'Repo           {repo_name:>26}')
+    print('-' * 41)
     print(f'Branch         {branch_name:>26}')
+    print('-' * 41)
     print(f'User           {gitpod_user:>26}')
+    print('-' * 41)
     print(f'Last Updated   {commit_date:>26}')
     print('-' * 41)
 
