@@ -1,6 +1,6 @@
 import os
 import subprocess
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 
 import fancy_text
 
@@ -23,7 +23,7 @@ def get_branch_name():
     try:
         return (
             subprocess.check_output(
-                ['git', 'rev-parse', '--abbrev-ref', 'HEAD']
+                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
             )
             .strip()
             .decode('utf-8')
@@ -37,7 +37,7 @@ def get_gitpod_user():
     return os.getenv('GITPOD_GIT_USER_NAME', 'Unknown User')
 
 
-def get_latest_commit_date():
+def get_latest_commit_date() -> str | None:
     """Returns the latest commit date in a human-readable format."""
     try:
         commit_date_str = (
@@ -46,17 +46,17 @@ def get_latest_commit_date():
             .decode('utf-8')
         )
         commit_date = datetime.strptime(
-            commit_date_str, '%a %b %d %H:%M:%S %Y %z'
+            commit_date_str,
+            '%a %b %d %H:%M:%S %Y %z',
         )
         now = datetime.now(UTC)
         delta = (now - commit_date).days
 
         if delta == 0:
             return 'today'
-        elif delta == 1:
+        if delta == 1:
             return 'yesterday'
-        else:
-            return f'{delta} d'
+        return f'{delta} d'
     except subprocess.CalledProcessError:
         return 'Unknown'
 
