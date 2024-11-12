@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+
 def get_repo_name():
     """Returns the name of the current Git repository."""
     try:
@@ -40,12 +41,15 @@ def main() -> None:
     gitpod_user = get_gitpod_user()
 
     # Display the repository information
-    print('╭' + '─' * 40 + '╮')
-    print('│     🚀 Gitpod Environment Info 🚀     │')
-    print('╰' + '─' * 40 + '╯')
+    print('─' * 41)
+    print('      🚀 Gitpod Environment Info 🚀      ')
+    print('─' * 41)
+    print('─' * 41)
     print(f'🗂️ Repo           {repo_name:>23}')
     print(f'🌿 Branch         {branch_name:>23}')
     print(f'👤 User           {gitpod_user:>23}')
+    print('─' * 41)
+    print('─' * 41)
 
 
 if __name__ == '__main__':
