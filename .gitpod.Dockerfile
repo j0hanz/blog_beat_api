@@ -1,6 +1,6 @@
 FROM gitpod/workspace-base
 
-ENV TRIGGER_REBUILD=2
+ENV TRIGGER_REBUILD=1
 
 # Environment variables
 ENV PYENV_ROOT="/home/gitpod/.pyenv"
