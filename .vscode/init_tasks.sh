@@ -4,19 +4,12 @@
 python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
 echo -n "🔄 Preparing workspace environment"
 for i in $(seq 1 10); do
-    sleep 0.3
+    sleep 0.5
     echo -n "."
 done
 echo
 
 # Function to check installation with limited output
-python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
-echo -n "🔍 Checking software installations"
-for i in $(seq 1 3); do
-    sleep 0.5
-    echo -n "."
-done
-echo
 check_installation() {
     if command -v "$1" >/dev/null 2>&1; then
         version=$("$1" --version | head -n 1)
@@ -77,6 +70,16 @@ install_requirements() {
 # Main setup process
 sleep 1
 
+# Install VS Code extensions
+install_vscode_extensions
+
+sleep 1
+
+# Install Python dependencies
+install_requirements
+
+sleep 1
+
 # Check for installations with minimal output
 tools="python pip node npm psql mongosh heroku docker aws git"
 names="Python pip Node.js npm PostgreSQL MongoDB Heroku CLI Docker AWS CLI Git"
@@ -84,12 +87,6 @@ names="Python pip Node.js npm PostgreSQL MongoDB Heroku CLI Docker AWS CLI Git"
 for tool in $tools; do
     check_installation "$tool" "$tool" || echo "⚠️ $tool not installed or not found."
 done
-
-sleep 1
-install_vscode_extensions
-
-sleep 1
-install_requirements
 
 # Final message with minimal output
 if [ $? -eq 0 ]; then
