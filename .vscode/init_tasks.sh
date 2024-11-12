@@ -83,7 +83,13 @@ sleep 1
 # Check for installations with minimal output
 tools="python pip node npm psql mongosh heroku docker aws git"
 names="Python pip Node.js npm PostgreSQL MongoDB Heroku CLI Docker AWS CLI Git"
-
+python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
+echo -n "🔍 Checking software installations"
+for i in $(seq 1 3); do
+    sleep 0.5
+    echo -n "."
+done
+echo
 for tool in $tools; do
     check_installation "$tool" "$tool" || echo "⚠️ $tool not installed or not found."
 done
