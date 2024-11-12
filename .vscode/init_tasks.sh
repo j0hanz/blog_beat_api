@@ -1,10 +1,19 @@
 #!/bin/sh
 
+python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.template_name)"
+
+# This script is used to setup the workspace environment for the Gitpod template.
+# It installs VS Code extensions, Python dependencies, and checks for software installations.
+# It also displays a final message with the status of the setup process.
+
+# Set delay so user can see the initial message before the setup process starts
+sleep 5
+
 # Logging and fancy text output
 python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
-echo -n "🔄 Preparing workspace environment"
+echo -n "🚀 Preparing workspace environment"
 for i in $(seq 1 10); do
-    sleep 0.75
+    sleep 0.5
     echo -n "."
 done
 echo
@@ -67,14 +76,6 @@ install_requirements() {
     fi
 }
 
-# Main setup process
-sleep 1
-
-# Install VS Code extensions
-install_vscode_extensions
-
-sleep 1
-
 # Install Python dependencies
 install_requirements
 
@@ -86,6 +87,11 @@ sleep 1
 
 python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
 pip-review
+
+# Install VS Code extensions
+install_vscode_extensions
+
+sleep 1
 
 # Check for installations with minimal output
 tools="python pip node npm psql mongosh heroku docker aws git"
@@ -107,7 +113,7 @@ if [ $? -eq 0 ]; then
     echo "✅ Setup complete! You are ready to start coding."
     echo ""
     # Run display_repo_info.py
-    python .vscode/display_repo_info.py
+    # python .vscode/display_repo_info.py
 else
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo "❌ Setup failed! Please check the logs and retry."
