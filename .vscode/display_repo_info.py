@@ -1,6 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
+import fancy_text
 
 
 def get_repo_name():
@@ -44,18 +45,15 @@ def main() -> None:
     commit_date = get_latest_commit_date()
 
     # Display the repository information
-    print('─' * 41)
-    print('      🚀 ɢɪᴛᴘᴏᴅ ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ ɪɴꜰᴏ 🚀      ')
-    print('─' * 41)
-    print('-' * 41)
-    print(f'Repo           {repo_name:>26}')
-    print('-' * 41)
-    print(f'Branch         {branch_name:>26}')
-    print('-' * 41)
-    print(f'User           {gitpod_user:>26}')
-    print('-' * 41)
-    print(f'Last Updated   {commit_date:>26}')
-    print('-' * 41)
+    print(fancy_text.gitpod_info)
+    print(f'Repo           {repo_name:>31}')
+    print('-' * 46)
+    print(f'Branch         {branch_name:>31}')
+    print('-' * 46)
+    print(f'User           {gitpod_user:>31}')
+    print('-' * 46)
+    print(f'Last Updated   {commit_date:>31}')
+    print('-' * 46)
 
 
 if __name__ == '__main__':
