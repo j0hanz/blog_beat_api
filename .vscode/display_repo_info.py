@@ -1,13 +1,18 @@
 import os
 import subprocess
 from datetime import datetime
+
 import fancy_text
 
 
 def get_repo_name():
     """Returns the name of the current Git repository."""
     try:
-        repo_path = subprocess.check_output(['git', 'rev-parse', '--show-toplevel']).strip().decode('utf-8')
+        repo_path = (
+            subprocess.check_output(['git', 'rev-parse', '--show-toplevel'])
+            .strip()
+            .decode('utf-8')
+        )
         return os.path.basename(repo_path)
     except subprocess.CalledProcessError:
         return 'Unknown Repository'
@@ -16,7 +21,13 @@ def get_repo_name():
 def get_branch_name():
     """Returns the current Git branch name."""
     try:
-        return subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip().decode('utf-8')
+        return (
+            subprocess.check_output(
+                ['git', 'rev-parse', '--abbrev-ref', 'HEAD']
+            )
+            .strip()
+            .decode('utf-8')
+        )
     except subprocess.CalledProcessError:
         return 'Unknown Branch'
 
@@ -27,12 +38,25 @@ def get_gitpod_user():
 
 
 def get_latest_commit_date():
-    """Returns the latest commit date in YYYY-MM-DD format."""
+    """Returns the latest commit date in a human-readable format."""
     try:
-        commit_date = subprocess.check_output(['git', 'log', '-1', '--format=%cd']).strip().decode('utf-8')
-        # Parse the commit date and format it to YYYY-MM-DD
-        formatted_date = datetime.strptime(commit_date, '%a %b %d %H:%M:%S %Y %z').strftime('%Y-%m-%d')
-        return formatted_date
+        commit_date_str = (
+            subprocess.check_output(['git', 'log', '-1', '--format=%cd'])
+            .strip()
+            .decode('utf-8')
+        )
+        commit_date = datetime.strptime(
+            commit_date_str, '%a %b %d %H:%M:%S %Y %z'
+        ).date()
+        today = datetime.now().date()
+        delta = today - commit_date
+
+        if delta.days == 0:
+            return 'today'
+        elif delta.days == 1:
+            return 'yesterday'
+        else:
+            return f'{delta.days} d'
     except subprocess.CalledProcessError:
         return 'Unknown'
 
@@ -46,14 +70,10 @@ def main() -> None:
 
     # Display the repository information
     print(fancy_text.gitpod_info)
-    print(f'Repo           {repo_name:>31}')
-    print('-' * 46)
-    print(f'Branch         {branch_name:>31}')
-    print('-' * 46)
-    print(f'User           {gitpod_user:>31}')
-    print('-' * 46)
-    print(f'Last Updated   {commit_date:>31}')
-    print('-' * 46)
+    print(f'{"🔖Repo":<15} {repo_name:>27}')
+    print(f'{"🌿Branch":<15} {branch_name:>27}')
+    print(f'{"👤User":<15} {gitpod_user:>27}')
+    print(f'{"🕒Last Commit":<15} {commit_date:>27}')
 
 
 if __name__ == '__main__':
