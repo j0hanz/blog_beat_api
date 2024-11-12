@@ -11,13 +11,6 @@ check_installation() {
 }
 
 # Checking software installations
-python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
-echo -n "🔍 Checking software installations"
-for i in $(seq 1 3); do
-    sleep 0.5
-    echo -n "."
-done
-echo
 check_installation "python" "Python"
 check_installation "pip" "pip"
 check_installation "node" "Node.js"
