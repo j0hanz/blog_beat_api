@@ -3,6 +3,7 @@ image:
 tasks:
   - name: Setup Environment
     init: |
+      clear
       . ${GITPOD_REPO_ROOT}/.vscode/init_tasks.sh
     command: |
       python ${GITPOD_REPO_ROOT}/.vscode/display_repo_info.py
@@ -14,8 +15,13 @@ vscode:
     - ms-python.python
     - ms-toolsai.jupyter
     - ms-toolsai.jupyter-keymap
-    - batisteo.vscode-django
+    - ms-toolsai.jupyter-renderers
     - esbenp.prettier-vscode
     - christian-kohler.path-intellisense
     - yzhang.markdown-all-in-one
     - GitHub.github-vscode-theme
+    - matt-rudge.auto-open-preview-panel
+    - formulahendry.auto-rename-tag
+    - formulahendry.auto-close-tag
+    - formulahendry.code-runner
+    - donjayamanne.python-extension-pack
