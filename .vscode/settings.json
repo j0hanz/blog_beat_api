@@ -33,7 +33,6 @@
   "editor.suggestSelection": "recentlyUsedByPrefix",
   "editor.tabCompletion": "on",
   "editor.wordWrap": "on",
-  "files.autoSave": "afterDelay",
 
   // Terminal Settings
   "terminal.integrated.fontSize": 16,
@@ -60,6 +59,9 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "shakram02.bash-beautify"
   },
 
   // Prettier Settings
@@ -102,12 +104,5 @@
   "markdown-preview-github-styles.colorTheme": "dark",
 
   // Black Formatter Settings
-  "black-formatter.args": [
-    "--line-length",
-    "79",
-    "--skip-string-normalization"
-  ],
-  "[shellscript]": {
-    "editor.defaultFormatter": "shakram02.bash-beautify"
-  }
+  "black-formatter.args": ["--line-length", "79", "--skip-string-normalization"]
 }
