@@ -10,11 +10,16 @@ python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fanc
 sleep 5
 
 echo -n "🚀 Preparing workspace environment"
-for i in $(seq 1 10); do
+for i in $(seq 1 20); do
     sleep 0.75
     echo -n "."
 done
 echo
+
+python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
+
+# Update and upgrade system packages
+sudo apt-get update -y && sudo apt-get full-upgrade -y
 
 # Function to check installation with limited output
 check_installation() {
@@ -30,8 +35,8 @@ check_installation() {
 install_vscode_extensions() {
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo -n "🔄 Installing extensions"
-    for i in $(seq 1 5); do
-        sleep 0.5
+    for i in $(seq 1 4); do
+        sleep 0.75
         echo -n "."
     done
     echo
@@ -57,8 +62,8 @@ install_vscode_extensions() {
 install_requirements() {
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo -n "🔄 Installing dependencies"
-    for i in $(seq 1 5); do
-        sleep 0.5
+    for i in $(seq 1 4); do
+        sleep 0.75
         echo -n "."
     done
     echo
@@ -74,30 +79,24 @@ install_requirements() {
     fi
 }
 
-# Install Python dependencies
-install_requirements
-
-sleep 1
-
-pip list
-
-sleep 1
-
-python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
-pip-review
-
 # Install VS Code extensions
 install_vscode_extensions
 
-sleep 1
+# Install Python dependencies
+install_requirements
 
-# Check for installations with minimal output
+pip list
+
+# Check versions of dependencies
+pip-review
+
+# Check for installations of software tools
 tools="python pip node npm psql mongosh heroku docker aws git"
 names="Python pip Node.js npm PostgreSQL MongoDB Heroku CLI Docker AWS CLI Git"
 python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
 echo -n "🔍 Checking software installations"
-for i in $(seq 1 5); do
-    sleep 0.5
+for i in $(seq 1 4); do
+    sleep 0.75
     echo -n "."
 done
 echo
@@ -105,7 +104,7 @@ for tool in $tools; do
     check_installation "$tool" "$tool" || echo "⚠️ $tool not installed or not found."
 done
 
-# Final message with minimal output
+# Final message with setup status
 if [ $? -eq 0 ]; then
     python -c "import sys; sys.path.append('.vscode'); import fancy_text; print(fancy_text.long_line)"
     echo "✅ Setup complete! You are ready to start coding."
